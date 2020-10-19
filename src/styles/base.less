@@ -1,0 +1,127 @@
+@import "mixin";
+html {
+  color: #666;
+}
+//body {
+//  min-width: 1200px;
+//}
+h1, h2, h3, h4, h5, h6, div, span, p, i, li, a {
+  font-size: 12px;
+}
+iframe {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.clearfix:before {
+  content: "";
+  display: table;
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+//flot
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+//text-align
+.tl {
+  text-align: left;
+}
+
+.tr {
+  text-align: right;
+}
+
+.tc {
+  text-align: center;
+}
+
+//position
+.pr {
+  position: relative;
+}
+
+.pa {
+  position: absolute;
+}
+
+.pf {
+  position: fixed;
+}
+//提示文字颜色
+.tips {
+  color: #888;
+}
+//overflow
+.oh {
+  overflow: hidden;
+}
+.ov {
+  overflow: visible;
+}
+.br_radius {
+  border-radius: 10px;
+}
+
+//color
+.generate-color(1);
+
+//margin padding
+.generate-mp(30);
+//border
+.generate-border(1, 1px, #ccc, gray);
+.generate-border(1, 1px, #fff, white);
+.generate-border(1, 1px, #f60, orange);
+//ellipse溢出隐藏
+.generate-ellipsis(5);
+
+//订单详情
+.detail-modal {
+
+  .detail-item {
+    display: flex;
+    align-items: center;
+    margin: 0 5px 5px 0;
+
+    .label {
+      width: 96px;
+      color: #999;
+      text-align: right;
+      margin-right: 4px;
+      &::after{
+        content: " :";
+      }
+    }
+
+    .values {
+      display: flex;
+    }
+  }
+}

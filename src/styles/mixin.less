@@ -1,0 +1,93 @@
+@colorName: white,
+orange,
+red,
+paleYellow,
+paleBlue,
+violet;
+@colorList: #fff,
+orange,
+#d60909d9,
+#ff642a,
+#56b1fc,
+#ff2055;
+//color  background
+.generate-color(@n,@i: length(@colorList),@name: extract(@colorName,@n)) when (@n =< @i) {
+  .@{name} {
+    color: extract(@colorList, @n);
+  }
+  .@{name}-bg {
+    background: extract(@colorList, @n);
+  }
+  .generate-color((@n+1), @i)
+}
+
+//border
+.generate-border(@n,@width,@color,@names,@i: 4) when (@n =< @i) {
+  .br-@{names}-@{n} {
+    border: @width solid @color;
+  }
+  .brt-@{names}-@{n} {
+    border-top: @width solid @color;
+  }
+  .brr-@{names}-@{n} {
+    border-right: @width solid @color;
+  }
+  .brb-@{names}-@{n} {
+    border-bottom: @width solid @color;
+  }
+  .brl-@{names}-@{n} {
+    border-left: @width solid @color;
+  }
+  .generate-border((@n+1), @color, @names, @i)
+}
+
+
+//margin  padding
+.generate-mp(@n, @i: 0) when (@i =< @n) {
+  .p-@{i} {
+    padding: @i + 0px !important;
+  }
+  .pt-@{i} {
+    padding-top: @i + 0px !important;
+  }
+  .pr-@{i} {
+    padding-right: @i + 0px !important;
+  }
+  .pb-@{i} {
+    padding-bottom: @i + 0px !important;
+  }
+  .pl-@{i} {
+    padding-left: @i + 0px !important;
+  }
+  .m-@{i} {
+    margin: @i + 0px !important;
+  }
+  .mt-@{i} {
+    margin-top: @i + 0px !important;
+  }
+  .mr-@{i} {
+    margin-right: @i + 0px !important;
+  }
+  .mb-@{i} {
+    margin-bottom: @i + 0px !important;
+  }
+  .ml-@{i} {
+    margin-left: @i + 0px !important;
+  }
+  .generate-mp(@n, (@i+5));
+}
+//溢出隐藏
+.generate-ellipsis(@lines, @i: 1) when (@i =< @lines) {
+  .ellipsis-@{i} {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: @i;
+    white-space: normal;
+    word-break: break-all;
+
+    /* autoprefixer: ignore next */
+    -webkit-box-orient: vertical;
+  }
+  .generate-ellipsis(@lines, (@i+1))
+}
