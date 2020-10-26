@@ -31,6 +31,11 @@ export const userDeleteApi = params => Http.get(
   `${BASE_URL}/user/deleteUserById`,
   { params }
 )
+// 重置密码
+export const resetPasswordApi = params => Http.get(
+  `${BASE_URL}/user/resetPassword`,
+  { params }
+)
 
 // 导入用户
 export const importUserApi = data => Http.request({

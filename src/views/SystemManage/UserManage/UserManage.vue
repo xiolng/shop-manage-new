@@ -40,12 +40,26 @@
               title="确定要删除吗？"
               @confirm="deleteUser(record.userId)"
             >
-              <a-button type="danger" size="small">删除</a-button>
+              <a-button
+                type="danger"
+                size="small"
+                class="mr-10"
+              >删除
+              </a-button>
             </a-popconfirm>
+          </a-col>
+          <a-col>
+            <a-button
+              size="small"
+              type="primary"
+              @click="activeId = record.userId, isChangePassword = true"
+            >重置密码
+            </a-button>
           </a-col>
         </a-row>
       </div>
     </a-table>
+    <!--添加用户-->
     <create-user
       v-if="visible"
       ref="createUser"
@@ -54,12 +68,19 @@
       @cancel="modalCancel"
       @create="modalCreate"
     />
+    <change-password
+      ref="changePassword"
+      :visible="isChangePassword"
+      @cancel="isChangePassword = false"
+      @create="savePassword"
+    />
   </div>
 </template>
 
 <script>
   import CreateUser from '@/views/SystemManage/UserManage/CreateUser'
-  import { userAddApi, userDeleteApi, userEditApi, userListApi } from '@/api/userManageApi'
+  import { resetPasswordApi, userAddApi, userDeleteApi, userEditApi, userListApi } from '@/api/userManageApi'
+  import ChangePassword from '@/views/SystemManage/UserManage/ChangePassword'
 
   const column = [
     {
@@ -93,7 +114,10 @@
   ]
   export default {
     name: 'UserManage',
-    components: { CreateUser },
+    components: {
+      ChangePassword,
+      CreateUser
+    },
     data () {
       return {
         column,
@@ -106,7 +130,9 @@
         searchName: {}, // 搜索关键字
         tableData: [],
         visible: false,
-        isEdit: false
+        isEdit: false,
+        isChangePassword: false,
+        activeId: ''
       }
     },
     mounted () {
@@ -136,7 +162,7 @@
         form.validateFields((err, values) => {
           if (!err) {
             const data = values
-            data.password = ''
+            // data.password = ''
             if (this.isEdit) {
               data.userId = this.isEdit
             }
@@ -147,6 +173,20 @@
                 form.resetFields()
                 this.visible = false
                 this.isEdit = false
+              }
+            })
+          }
+        })
+      },
+      savePassword () {
+        this.$refs.changePassword.form.validateFields((err, val) => {
+          if (!err) {
+            resetPasswordApi({
+              ...val,
+              userId: this.activeId
+            }).then(res => {
+              if (res.data.code === '200') {
+                this.$message.success(`修改成功`)
               }
             })
           }

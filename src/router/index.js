@@ -98,6 +98,15 @@ const routes = [
             meta: {
               name: '系统服务编辑',
               icon: 'menu',
+            },
+          },
+          {
+            path: 'timeRule',
+            name: 'timeRule',
+            component: () => import('@/views/SystemService/TimeRule/TimeRule'),
+            meta: {
+              name: '时间规则',
+              icon: 'menu',
             }
           },
         ]
@@ -110,6 +119,25 @@ const routes = [
           name: 'CRM菜单',
           icon: 'menu'
         }
+      },
+      {
+        path: `/tenantManage`,
+        name: 'tenantManage',
+        component: () => import('@/views/TenantManage'),
+        meta: {
+          name: '租户',
+          icon: 'menu'
+        },
+        children: [
+          {
+            path: 'list',
+            name: 'tenantManageList',
+            component: () => import('@/views/TenantManage/TenantManage'),
+            meta: {
+              name: '租户管理'
+            }
+          }
+        ]
       }
     ]
   },

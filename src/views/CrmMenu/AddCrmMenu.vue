@@ -3,16 +3,16 @@
   <div class="add-user">
     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
       <!--<FormItem label="上级菜单">-->
-        <!--<Input :value="menuData.data.menuName" disabled/>-->
+      <!--<Input :value="menuData.data.menuName" disabled/>-->
       <!--</FormItem>-->
       <FormItem label="地址" prop="menuUrl">
-        <Input v-model="formValidate.menuUrl" placeholder="请输入地址名" autofocus/>
+        <Input v-model="formValidate.menuUrl" placeholder="请输入地址名" autofocus />
       </FormItem>
       <FormItem label="菜单名" prop="menuName">
-        <Input v-model="formValidate.menuName" placeholder="请输入菜单名"/>
+        <Input v-model="formValidate.menuName" placeholder="请输入菜单名" />
       </FormItem>
       <FormItem label="icon" prop="icon">
-        <Input v-model="formValidate.icon" @on-enter="modalOk" placeholder="请输入icon名"/>
+        <Input v-model="formValidate.icon" @on-enter="modalOk" placeholder="请输入icon名" />
       </FormItem>
     </Form>
     <Row type="flex" justify="end" :gutter="20">
@@ -45,7 +45,11 @@
         },
         ruleValidate: {
           menuName: [
-            { required: true, message: '请输入菜单名', trigger: 'blur' }
+            {
+              required: true,
+              message: '请输入菜单名',
+              trigger: 'blur'
+            }
           ],
         }
       }
@@ -53,13 +57,16 @@
     beforeMount () {
       if (this.activeData && this.activeData.menuName) this.formValidate = this.activeData
     },
+    mounted () {
+      console.log(4444, this.menuData)
+    },
     methods: {
       // 保存
       modalOk () {
         this.$refs.formValidate.validate((valid) => {
           if (valid) {
             menuAddApi({
-              parentId: this.menuData.data.menuId,
+              parentId: this.menuData.data.parentId,
               ...this.formValidate
             }).then(res => {
               if (res.data.code === '200') {

@@ -13,10 +13,10 @@
       >
         <div slot="extra">
           <a-button
-            type="danger"
+            type="link"
             size="small"
             shape="circle"
-            icon="minus"
+            icon="close"
             @click="remove(k)"
           >
           </a-button>
@@ -33,31 +33,6 @@
             ]"
           />
         </a-form-item>
-        <a-form-item label="服务时长">
-          <a-input-number
-            placeholder="请输入服务时长"
-            v-decorator="[
-              `serviceDay[${k}]`,
-              {
-                initialValue: serviceDay[k],
-                rules: [{required: true, message: '请输入服务时长'}]
-              }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item label="时长描述">
-          <a-textarea
-            placeholder="请输入时长描述"
-            v-decorator="[
-              `serviceLimitDetail[${k}]`,
-              {
-                initialValue: serviceLimitDetail[k],
-                rules: [{required: true, message: '请输入时长描述'}]
-              }
-            ]"
-            :auto-size="{minRows: 1, maxRows: 5}"
-          />
-        </a-form-item>
         <a-form-item label="价格">
           <a-input-number
             placeholder="请输入价格"
@@ -66,33 +41,6 @@
               {
                 initialValue: servicePrice[k],
                 rules: [{required: true, message: '请输入价格'}]
-              }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item label="系统服务id">
-          <a-input
-            placeholder="请输入系统服务id"
-            v-decorator="[
-              `systemServiceId[${k}]`,
-              {
-                initialValue: systemServiceId[k],
-                rules: [{required: true, message: '请输入系统服务id'}]
-              }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item
-          label="系统服务限制id"
-          extra="多个id用逗号分隔（1,2,3）"
-        >
-          <a-input
-            placeholder="请输入系统服务限制id"
-            v-decorator="[
-              `systemServiceLimitId[${k}]`,
-              {
-                initialValue: systemServiceLimitId[k],
-                rules: [{required: true, message: '请输入系统服务限制id'}]
               }
             ]"
           />

@@ -33,6 +33,20 @@
             ]"
         />
       </a-form-item>
+
+      <a-form-item label="权限">
+
+        <a-tree-select
+          :treeData="treeData"
+          treeCheckable
+          :showCheckedStrategy="showParent"
+          placeholder="请选择商品类别"
+          v-decorator="[
+            `shopType`,
+            {rules: [{required: true, message: '请选择商品类别'}]}
+          ]"
+        />
+      </a-form-item>
       <a-form-item label=" " :colon="false">
         <a-button
           type="primary"
@@ -48,6 +62,7 @@
 </template>
 
 <script>
+  import { TreeSelect } from 'ant-design-vue'
   import ServiceArr from '@/views/SystemService/ServiceArr'
   import { SystemServiceAddApi, SystemServiceeDetailApi } from '@/api/SystemServiceApi'
 
@@ -88,11 +103,7 @@
                   console.log(v)
                   return {
                     peopleNum: val.peopleNum[v],
-                    serviceDay: val.serviceDay[v],
-                    serviceLimitDetail: val.serviceLimitDetail[v],
                     servicePrice: val.servicePrice[v],
-                    systemServiceId: val.systemServiceId[v],
-                    systemServiceLimitId: val.systemServiceLimitId[v]
                   }
                 })
                 console.log(5555, limitList)
