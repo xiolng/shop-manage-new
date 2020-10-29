@@ -1,52 +1,56 @@
 <!--xiolng-->
-<!--ServiceArr-->
-<!--2020/10/15-->
-<!--16:49-->
+<!--RuleArr-->
+<!--2020/10/29-->
+<!--15:16-->
 <template>
-  <div class="service-arr">
-    <a-form :form="form" layout="inline">
-      <a-card
-        v-for="(k, index) in form.getFieldValue('keys')"
-        :key="k"
-        :title="`服务类型-${(index + 1).toString()}`"
-        class="mb-10"
-      >
-        <div slot="extra">
-          <a-button
-            type="link"
-            size="small"
-            shape="circle"
-            icon="close"
-            @click="remove(k)"
-          >
-          </a-button>
-        </div>
-        <a-form-item label="人数">
-          <a-input-number
-            placeholder="请输入人数"
-            v-decorator="[
+  <div class="rule-arr">
+    <div class="form-box">
+      <a-form :form="form" layout="inline">
+        <a-card
+          v-for="(k, index) in form.getFieldValue('keys')"
+          :key="k"
+          :title="`折扣管理-${(index + 1).toString()}`"
+          class="mb-10"
+          :head-style="{padding: '0 10px', minHeight: '30px'}"
+          :body-style="{padding: '10px'}"
+        >
+          <div slot="extra">
+            <a-button
+              type="link"
+              size="small"
+              shape="circle"
+              icon="close"
+              @click="remove(k)"
+            >
+            </a-button>
+          </div>
+          <a-form-item label="数量">
+            <a-input-number
+              placeholder="请输入数量"
+              v-decorator="[
               `peopleNum[${k}]`,
               {
                 initialValue: peopleNum[k],
-                rules: [{required: true, message: '请输入人数'}]
+                rules: [{required: true, message: '请输入数量'}]
               }
             ]"
-          />
-        </a-form-item>
-        <a-form-item label="价格">
-          <a-input-number
-            placeholder="请输入价格"
-            v-decorator="[
+            />
+          </a-form-item>
+          <a-form-item label="折扣比率">
+            <a-input-number
+              placeholder="请输入折扣比率"
+              v-decorator="[
               `servicePrice[${k}]`,
               {
                 initialValue: servicePrice[k],
-                rules: [{required: true, message: '请输入价格'}]
+                rules: [{required: true, message: '请输入折扣比率'}]
               }
             ]"
-          />
-        </a-form-item>
-      </a-card>
-    </a-form>
+            />
+          </a-form-item>
+        </a-card>
+      </a-form>
+    </div>
     <div class="mt-20 mb-20">
       <a-button
         type="primary"
@@ -60,7 +64,7 @@
 <script>
   let id = 1
   export default {
-    name: 'ServiceArr',
+    name: 'RuleArr',
     props: {
       limitList: [Array, Object]
     },
@@ -82,7 +86,7 @@
       const { form } = this
       this.$watch(
         'limitList', function (val, oldVal) {
-          if (!this.limitList.length) {
+          if (!vm.limitList.length) {
             console.log(val, oldVal, val.length)
             val.length && val.map((v, index) => {
               const keys = form.getFieldValue('keys')
@@ -134,11 +138,19 @@
 </script>
 
 <style scoped lang="less">
-  .service-arr {
-    margin-bottom: 20px;
+  .rule-arr {
+    .form-box {
+      max-height: 310px;
+      overflow: hidden;
+      overflow-y: auto;
+    }
 
-    .ant-input {
-      width: 100px;
+    /deep/ .ant-card-head-title {
+      padding: 4px;
+    }
+
+    /deep/ .ant-card-extra {
+      padding: 4px;
     }
   }
 </style>

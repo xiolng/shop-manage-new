@@ -7,7 +7,8 @@
  *  @param meta: 附加信息{
  *    name: 菜单名称,
  *    icon: 菜单图标,
- *    hideMenu: 是否隐藏菜单
+ *    hideMenu: 是否隐藏菜单,
+ *    activeUrl: 匹配选中菜单
  *  },
  * }
  */
@@ -35,6 +36,7 @@ const routes = [
         meta: {
           name: '系统管理',
           icon: 'setting',
+          activeUrl: '/systemManage'
         },
         children: [
           {
@@ -44,6 +46,7 @@ const routes = [
             meta: {
               name: '用户管理',
               icon: 'usergroup-add',
+              activeUrl: '/systemManage/userManage'
             }
           },
           {
@@ -54,6 +57,7 @@ const routes = [
               name: '角色管理',
               icon: 'cluster',
               searchKey: 'RoleManage',
+              activeUrl: '/systemManage/roleManage'
             }
           },
           {
@@ -63,6 +67,7 @@ const routes = [
             meta: {
               name: '菜单管理',
               icon: 'bars',
+              activeUrl: '/systemManage/MenuManage'
             }
           },
           {
@@ -72,7 +77,8 @@ const routes = [
             meta: {
               name: '操作日志',
               icon: 'file-word',
-              theme: true
+              theme: true,
+              activeUrl: '/systemManage/operation'
             }
           },
         ]
@@ -81,6 +87,10 @@ const routes = [
         path: '/systemService',
         name: 'SystemService',
         component: () => import('@/views/SystemService'),
+        meta: {
+          name: '',
+          activeUrl: '/systemService'
+        },
         children: [
           {
             path: 'systemServiceList',
@@ -89,6 +99,7 @@ const routes = [
             meta: {
               name: '系统服务列表',
               icon: 'menu',
+              activeUrl: '/systemService/systemServiceList'
             }
           },
           {
@@ -98,6 +109,7 @@ const routes = [
             meta: {
               name: '系统服务编辑',
               icon: 'menu',
+              activeUrl: '/systemService/systemServiceList'
             },
           },
           {
@@ -107,6 +119,7 @@ const routes = [
             meta: {
               name: '时间规则',
               icon: 'menu',
+              activeUrl: '/systemService/timeRule'
             }
           },
         ]
@@ -117,7 +130,8 @@ const routes = [
         component: () => import('@/views/CrmMenu/MenuCrmManage'),
         meta: {
           name: 'CRM菜单',
-          icon: 'menu'
+          icon: 'menu',
+          activeUrl: '/crmMenu'
         }
       },
       {
@@ -126,7 +140,8 @@ const routes = [
         component: () => import('@/views/TenantManage'),
         meta: {
           name: '租户',
-          icon: 'menu'
+          icon: 'menu',
+          activeUrl: '/tenantManage'
         },
         children: [
           {
@@ -134,9 +149,28 @@ const routes = [
             name: 'tenantManageList',
             component: () => import('@/views/TenantManage/TenantManage'),
             meta: {
-              name: '租户管理'
+              name: '租户管理',
+              activeUrl: '/tenantManage/list'
             }
-          }
+          },
+          {
+            path: 'serviceGet',
+            name: 'serviceGet',
+            component: () => import('@/views/TenantManage/ServiceGet'),
+            meta: {
+              name: '查询服务',
+              activeUrl: '/tenantManage/list'
+            }
+          },
+          {
+            path: 'serviceUser',
+            name: 'serviceUser',
+            component: () => import('@/views/TenantManage/ServiceUser'),
+            meta: {
+              name: '查询用户',
+              activeUrl: '/tenantManage/list'
+            }
+          },
         ]
       }
     ]
@@ -148,7 +182,8 @@ const routes = [
       {
         path: '/',
         name: 'login',
-        component: () => import('@/views/Login/Login')
+        component: () => import('@/views/Login/Login'),
+        activeUrl: '/signin'
       }
     ]
   },

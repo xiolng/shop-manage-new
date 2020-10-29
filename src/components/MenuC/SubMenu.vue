@@ -1,7 +1,7 @@
 <!--MenuItem-->
 <template>
   <a-sub-menu
-    :key="(menuInfo.menuUrl.includes('/') && menuInfo.menuUrl.replace(/\//, '')) || menuInfo.menuUrl"
+    :key="menuInfo.menuUrl"
     v-bind="$props"
     v-on="$listeners"
   >
@@ -11,12 +11,12 @@
     <template v-for="item in menuInfo.children">
       <a-menu-item
         v-if="!item.children"
-        :key="(item.menuUrl.includes('/') && item.menuUrl.replace(/\//, '')) || item.menuUrl"
+        :key="item.menuUrl"
       >
         <a-icon :type="item.icon" />
         <span>{{item.menuName}}</span>
       </a-menu-item>
-      <sub-menu v-else :key="(item.menuUrl.includes('/') && item.menuUrl.replace(/\//, '')) || item.menuUrl" :menu-info="item" />
+      <sub-menu v-else :key="item.menuUrl" :menu-info="item" />
     </template>
   </a-sub-menu>
 </template>

@@ -1,9 +1,9 @@
 <!--xiolng-->
-<!--List-->
-<!--2020/10/15-->
-<!--15:18-->
+<!--ServiceUser-->
+<!--2020/10/29-->
+<!--16:27-->
 <template>
-  <div class="List main-content">
+  <div class="ServiceUser">
     <!--筛选、添加-->
     <a-row type="flex" justify="space-between" align="top" class="mb-20">
       <a-col span="20">
@@ -14,22 +14,13 @@
             ]"
         />
       </a-col>
-      <a-col>
-        <a-button
-          type="primary"
-          @click="$router.push({
-          path: `/systemService/systemServiceEdit`
-          })"
-        >新建
-        </a-button>
-      </a-col>
     </a-row>
     <!--table-list-->
     <a-table
       :columns="column"
       :dataSource="dataSource"
       :pagination="pages"
-      rowKey="systemServiceId"
+      rowKey="id"
       @change="pageChange"
     >
       <div slot="operation" slot-scope="text, record">
@@ -39,16 +30,14 @@
               type="primary"
               size="small"
               class="mr-10"
-              @click="$router.push({
-              path: `/systemService/systemServiceEdit?id=${record.systemServiceId}`
-              })"
+              @click="visible = !visible, isEdit = record.id"
             >编辑
             </a-button>
           </a-col>
           <a-col>
             <a-popconfirm
               title="确定要删除吗？"
-              @confirm="deleteItem(record.systemServiceId)"
+              @confirm="deleteItem(record.id)"
             >
               <a-button type="danger" size="small">删除</a-button>
             </a-popconfirm>
@@ -62,44 +51,24 @@
 <script>
 
   import SearchC from '@/components/SearchC/SearchC'
-  import { SystemServiceDeleteApi, SystemServiceListApi } from '@/api/SystemServiceApi'
+  import { userDeleteApi, userListApi } from '@/api/userManageApi'
 
   const column = [
     {
-      title: '服务id',
-      dataIndex: 'systemServiceId'
+      title: '用户名',
+      dataIndex: 'username'
     },
     {
-      title: '服务名称',
-      dataIndex: 'serviceName'
+      title: '姓名',
+      dataIndex: 'realname'
     },
     {
-      title: '服务描述',
-      dataIndex: 'serviceDetail'
+      title: '角色',
+      dataIndex: 'roleIds'
     },
     {
-      title: '服务规格',
-      dataIndex: 'serviceName'
-    },
-    {
-      title: '服务折扣',
-      dataIndex: 'serviceDetail'
-    },
-    {
-      title: '更新人',
-      dataIndex: 'updateBy'
-    },
-    {
-      title: '更新时间',
-      dataIndex: 'updateTime'
-    },
-    {
-      title: '创建人',
-      dataIndex: 'createBy'
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createTime'
+      title: '手机',
+      dataIndex: 'phone'
     },
     {
       title: '操作',
@@ -109,10 +78,8 @@
     }
   ]
   export default {
-    name: 'List',
-    components: {
-      SearchC
-    },
+    name: 'ServiceUser',
+    components: { SearchC },
     data () {
       return {
         column,
@@ -124,19 +91,13 @@
         }, // 分页
         searchName: {}, // 搜索关键字
         dataSource: [],
-        visible: false,
-        isEdit: ''
       }
-    },
-    created () {
-      this.getList()
     },
     methods: {
       // 获取列表
       getList () {
-        SystemServiceListApi({
-          pageSize: this.pages.pageSize,
-          pageNum: this.pages.current,
+        userListApi({
+          ...this.pages,
           ...this.searchName
         }).then(res => {
           const { data, code, total } = res.data
@@ -146,19 +107,12 @@
           }
         })
       },
-      cancelModal () {
-        console.log('cancel')
-        this.visible = false
-      },
-      createModal () {
-        console.log(this.$refs.editService)
-      },
       /**
        * 删除
        * @param id
        */
       deleteItem (id) {
-        SystemServiceDeleteApi({
+        userDeleteApi({
           id
         }).then(res => {
           const { code } = res
@@ -193,7 +147,7 @@
 </script>
 
 <style scoped lang="less">
-  .List {
+  .ServiceUser {
 
   }
 </style>

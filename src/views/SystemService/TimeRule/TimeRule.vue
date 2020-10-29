@@ -78,7 +78,15 @@
         dataSource: [],
         columns: [
           {
-            title: '规则名称',
+            title: '折扣名称',
+            dataIndex: 'roleName',
+          },
+          {
+            title: '折扣描述',
+            dataIndex: 'roleName',
+          },
+          {
+            title: '折扣比率',
             dataIndex: 'roleName',
           },
           {
@@ -99,6 +107,7 @@
           },
           {
             title: '操作',
+            width: 130,
             dataIndex: 'operation',
             scopedSlots: { customRender: 'operation' },
           },
@@ -134,13 +143,6 @@
           this.formData = data
         })
       },
-      saveForm () {
-        this.$refs.createTimeRule.form.validateFields((err, val) => {
-          if (!err) {
-            console.log(JSON.stringify(val))
-          }
-        })
-      },
       // 分页
       pageChange (pagination) {
         this.pages = {
@@ -162,21 +164,26 @@
         })
       },
       // 保存
-      saveUser () {
+      saveForm () {
         const api = this.isEdit ? roleEditApi : roleAddApi
-        this.form.validateFields((err, values) => {
+        this.$refs.createTimeRule.form.validateFields((err, values) => {
           if (!err) {
-            api({
-              ...values,
-              roleId: this.formData.roleId || ''
-            }).then(res => {
-              if (res.data.code === '200') {
-                this.$message.info(`保存成功`)
-                this.getList()
-                this.form.resetFields()
-                this.formData = {}
-                this.isEdit = false
-                this.isShowModal = false
+            this.$refs.createTimeRule.$refs.ruleArr.form.validateFields((errChild, valChild) => {
+              if (!errChild) {
+                console.log(valChild)
+                api({
+                  ...values,
+                  roleId: this.formData.roleId || ''
+                }).then(res => {
+                  if (res.data.code === '200') {
+                    this.$message.info(`保存成功`)
+                    this.getList()
+                    this.form.resetFields()
+                    this.formData = {}
+                    this.isEdit = false
+                    this.isShowModal = false
+                  }
+                })
               }
             })
           }

@@ -16,7 +16,21 @@
             ]"
         />
       </a-form-item>
-      <a-form-item label="服务详情">
+      <a-form-item label="服务折扣">
+        <a-select
+          v-decorator="[
+            `serviceSale`,
+            {
+              initialValue: undefined,
+              rules: [{required: true, message: '请选择折扣'}]
+            }
+          ]"
+          placeholder="请选择折扣"
+        >
+          <a-select-option value="wef">wef</a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="服务人数">
         <a-card>
           <service-arr ref="serviceArr" :limit-list="limitList" />
         </a-card>
@@ -37,7 +51,7 @@
       <a-form-item label="权限">
 
         <a-tree-select
-          :treeData="treeData"
+          :treeData="menuData"
           treeCheckable
           :showCheckedStrategy="showParent"
           placeholder="请选择商品类别"
@@ -65,6 +79,8 @@
   import { TreeSelect } from 'ant-design-vue'
   import ServiceArr from '@/views/SystemService/ServiceArr'
   import { SystemServiceAddApi, SystemServiceeDetailApi } from '@/api/SystemServiceApi'
+  import { menuAllListlApi } from '@/api/MenuManageApi'
+  import { treeMenu } from '@/utils/menu'
 
   export default {
     name: 'EditService',
@@ -73,11 +89,14 @@
       return {
         form: this.$form.createForm(this, {}),
         loading: false,
-        limitList: []
+        limitList: [],
+        showParent: TreeSelect.SHOW_ALL,
+        menuData: []
       }
     },
     mounted () {
       this.$route.query.id && this.getDetail()
+      this.getMenuData()
     },
     methods: {
       getDetail () {
@@ -88,6 +107,12 @@
             const { data } = res.data
             this.limitList = data.limitList
           }
+        })
+      },
+      // 获取菜单列表
+      getMenuData () {
+        menuAllListlApi({}).then(res => {
+          this.menuData = treeMenu(res.data.data)
         })
       },
       saveForm () {

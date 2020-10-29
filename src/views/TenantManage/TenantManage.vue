@@ -39,13 +39,35 @@
         >服务管理
         </a-button>
       </div>
-      <div slot="tenantStatus" slot-scope="text">
+      <div slot="serviceGet" slot-scope="text">
         <a-button
-          :type="text ? 'danger':'primary'"
+          type="primary"
           size="small"
           class="mr-10"
-        >{{text ? '禁用':'启用'}}
+          @click="$router.push({
+          path: `/tenantManage/serviceGet`
+          })"
+        >查询服务
         </a-button>
+      </div>
+      <div slot="serviceUser" slot-scope="text">
+        <a-button
+          type="primary"
+          size="small"
+          class="mr-10"
+          @click="$router.push({
+          path: `/tenantManage/serviceUser`
+          })"
+        >查询用户
+        </a-button>
+      </div>
+      <div slot="tenantStatus" slot-scope="text">
+        <a-switch
+          :checked="text"
+          class="mr-10"
+          checked-children="是"
+          un-checked-children="否"
+        />
       </div>
       <div slot="operation" slot-scope="text, record">
         <a-row type="flex">
@@ -101,27 +123,11 @@
       dataIndex: 'tenantName'
     },
     {
-      title: '主用户名称',
+      title: '租户描述',
       dataIndex: 'mainUser'
     },
     {
-      title: '主用户联系电话',
-      dataIndex: 'mainUserPhone'
-    },
-    {
-      title: '开通服务名称',
-      dataIndex: 'serviceName'
-    },
-    {
-      title: '服务开通时间',
-      dataIndex: 'serviceOpenTime'
-    },
-    {
-      title: '服务开通人',
-      dataIndex: 'serviceOpener'
-    },
-    {
-      title: '租户状态',
+      title: '是否启用',
       dataIndex: 'tenantStatus',
       scopedSlots: { customRender: 'tenantStatus' }
     },
@@ -129,6 +135,24 @@
       title: '服务管理',
       dataIndex: 'serviceManage',
       scopedSlots: { customRender: 'serviceManage' }
+    },
+    {
+      title: '创建人',
+      dataIndex: 'createBy'
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime'
+    },
+    {
+      title: '服务',
+      dataIndex: 'serviceGet',
+      scopedSlots: { customRender: 'serviceGet' }
+    },
+    {
+      title: '用户',
+      dataIndex: 'serviceUser',
+      scopedSlots: { customRender: 'serviceUser' }
     },
     {
       title: '操作',

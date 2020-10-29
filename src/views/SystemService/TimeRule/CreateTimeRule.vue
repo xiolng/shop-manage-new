@@ -7,10 +7,10 @@
     <a-modal
       :visible="visible"
       title="新建、编辑"
-      @cancel="$emit('cancel')"
+      @cancel="$emit('cancel'), $refs.ruleArr.form.resetFields()"
       @ok="$emit('create')"
     >
-      <a-form :form="form" :label-col="{span: 5}" :wrapper-col="{span: 16}">
+      <a-form :form="form" :label-col="{span: 4}" :wrapper-col="{span: 20}">
         <a-form-item label="规则名称">
           <a-input
             placeholder="请输入规则名称"
@@ -22,87 +22,40 @@
             ]"
           />
         </a-form-item>
-        <a-form-item label="1个月优惠">
-          <a-input-number
-            placeholder="请输入1个月优惠"
+        <a-form-item label="规则描述">
+          <a-textarea
+            :auto-size="{minRows: 2, maxRows: 4}"
+            placeholder="请输入规则描述"
             v-decorator="[
-              `ruleSale1`,
+              `ruleName`,
               {
-                rules: [{required: true, message: '请输入1个月优惠'}]
+                rules: [{required: true, message: '请输入规则描述'}]
               }
             ]"
           />
         </a-form-item>
-        <a-form-item label="2个月优惠">
-          <a-input-number
-            placeholder="请输入2个月优惠"
-            v-decorator="[
-              `ruleSale2`,
-              {
-                rules: [{required: true, message: '请输入2个月优惠'}]
-              }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item label="3个月优惠">
-          <a-input-number
-            placeholder="请输入3个月优惠"
-            v-decorator="[
-              `ruleSale3`,
-              {
-                rules: [{required: true, message: '请输入3个月优惠'}]
-              }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item label="6个月优惠">
-          <a-input-number
-            placeholder="请输入6个月优惠"
-            v-decorator="[
-              `ruleSale6`,
-              {
-                rules: [{required: true, message: '请输入6个月优惠'}]
-              }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item label="1年优惠">
-          <a-input-number
-            placeholder="请输入1年优惠"
-            v-decorator="[
-              `ruleSale12`,
-              {
-                rules: [{required: true, message: '请输入1年优惠'}]
-              }
-            ]"
+        <a-form-item
+          label="折扣管理"
+          extra="最小单位为月，如数量录入2，就是2个月，折扣比率是多少。折扣比率为百分比，例如95%，录入95即可。"
+        >
+          <rule-arr
+            ref="ruleArr"
+            :limit-list="limitList"
           />
         </a-form-item>
       </a-form>
     </a-modal>
-    <select-type-drawer
-      v-if="showDrawer"
-      :func="func"
-      :visible="showDrawer"
-      :select-list="selectList"
-      @cancel="showDrawer = false"
-      @create="setPool"
-      check-type="radio"
-    />
   </div>
 </template>
 
 <script>
-  import UploadImgC from '@/components/UploadImgC/UploadImgC'
   import { BannerGetByIdApi } from '@/api/BannerApi'
-  import { ComboGetlistIdNameApi } from '@/api/ComboManageApi'
-  import { ShopGetlistIdNameApi } from '@/api/ShopManageApi'
-  import SelectTypeDrawer from '@/components/SelectTypeDrawer'
+  import RuleArr from '@/views/SystemService/TimeRule/RuleArr'
 
   export default {
     name: 'CreateTimeRule',
     components: {
-      SelectTypeDrawer,
-      UploadImgC
+      RuleArr
     },
     props: {
       visible: Boolean,
@@ -115,7 +68,8 @@
         poolList: [],
         showDrawer: false,
         func: null,
-        selectList: []
+        selectList: [],
+        limitList: []
       }
     },
     mounted () {
@@ -137,19 +91,6 @@
           }
         })
       },
-      // 获取号池
-      setSelect () {
-        const type = this.form.getFieldValue('type')
-        this.showDrawer = true
-        this.selectList = [this.form.getFieldValue('relationId') || '']
-        this.func = type === '0' ? ComboGetlistIdNameApi : ShopGetlistIdNameApi
-      },
-      setPool ({ item }) {
-        this.shopList = item
-        this.form.setFieldsValue({ relationId: item[0].id })
-        this.showDrawer = false
-        this.$forceUpdate()
-      }
     },
   }
 </script>

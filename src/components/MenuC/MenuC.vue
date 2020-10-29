@@ -12,7 +12,7 @@
       <template v-for="item in menuData">
         <!--一级菜单-->
         <a-menu-item
-          :key="(item.menuUrl.includes('/') && item.menuUrl.replace(/\//, '')) || item.menuUrl"
+          :key="item.menuUrl"
           v-if="item && !item.children"
         >
           <a-icon :type="item.icon" />
@@ -22,7 +22,7 @@
         <sub-menu
           v-if="item.children"
           :menu-info="item"
-          :key="(item.menuUrl.includes('/') && item.menuUrl.replace(/\//, '')) || item.menuUrl"
+          :key="item.menuUrl"
         />
       </template>
     </a-menu>
@@ -53,31 +53,20 @@
     },
     beforeMount () {
       // 设置选中菜单
-      this.selectMenu = [this.$route.path.replace(/\//, '')]
+      this.selectMenu = [this.$route.meta.activeUrl]
     },
     mounted () {
     },
     methods: {
       openKeys () {
-        const list = this.$route.path.split('/').filter(v => v && v)
-        if (list.length <= 0) return
-        let text = list[0]
-        const path = [text]
-        list.map((v, index) => {
-          if (index > 0) {
-            path.push(`${text}/${v}`)
-            text = `${text}/${v}`
-          }
-        })
-        return path
+        return [this.$route.matched[1].meta.activeUrl]
       },
       // 点击菜单选中
       clickMenu ({ item, key, keyPath }) {
         this.selectMenu = [key]
-        const routerData = key.split('/').map(v => v && `/${v}`).join('')
-        if (routerData === this.$route.path) return
+        if (key === this.$route.path) return
         this.$router.push({
-          path: routerData
+          path: key
         })
       }
     },
