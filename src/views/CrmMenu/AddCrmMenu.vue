@@ -28,7 +28,7 @@
 
 <script>
 
-  import { menuAddApi } from '@/api/MenuManageApi'
+  import { CrmMenuAddApi } from '@/api/CrmMenuApi'
 
   export default {
     props: {
@@ -65,8 +65,8 @@
       modalOk () {
         this.$refs.formValidate.validate((valid) => {
           if (valid) {
-            menuAddApi({
-              parentId: this.menuData.data.parentId,
+            CrmMenuAddApi({
+              parentId: this.menuData.data.systemMenuId,
               ...this.formValidate
             }).then(res => {
               if (res.data.code === '200') {

@@ -18,7 +18,7 @@ export default new Vuex.Store({
     getMenu ({ commit }) {
       menuLoginApi({}).then(res => {
         if (res.data.code === '200') {
-          commit('setMenuData', treeMenu(res.data.data))
+          commit('setMenuData', treeMenu(res.data.data, 'menuId'))
           localStorage.setItem('menuData', JSON.stringify(res.data.data))
         }
       })

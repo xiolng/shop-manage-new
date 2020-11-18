@@ -3,7 +3,8 @@
  * @param data
  * @returns {[]}
  */
-export const treeMenu = data => {
+export const treeMenu = (data, id) => {
+  console.log(222, id, data)
   const result = []
   if (!Array.isArray(data)) {
     return result
@@ -13,11 +14,11 @@ export const treeMenu = data => {
   })
   const map = {}
   data.forEach(item => {
-    map[item.menuId] = item
+    map[item[id]] = item
   })
   data.forEach(item => {
-    item.key = item.menuId
-    item.value = item.menuId
+    item.key = item[id]
+    item.value = item[id]
     item.title = item.menuName
     const parentId = map[item.parentId]
     if (parentId) {
@@ -26,6 +27,7 @@ export const treeMenu = data => {
       result.push(item)
     }
   })
+  console.log(result, 111)
   return result
 }
 /**
@@ -68,6 +70,7 @@ export const rootFun = function (h, { root, node, data }) {
             vm.menuData = {
               data: {
                 menuId: '0',
+                systemMenuId: '0',
                 title: 'root'
               }
             }
@@ -182,8 +185,9 @@ export const renderContent = function (h, { root, node, data }) {
                   click () {
                     const parentKey = root.find(el => el === node).parent
                     const parentId = root.find(el => el.nodeKey === parentKey).node
+                    const editData = data.menuId ? { menuId: data.menuId } : { systemMenuId: data.systemMenuId }
                     vm.menuData = {
-                      menuId: data.menuId,
+                      ...editData,
                       parentId
                     }
                     vm.showModal = !vm.showModal
@@ -216,6 +220,7 @@ export const renderContent = function (h, { root, node, data }) {
                 },
                 on: {
                   click () {
+                    console.log('data', data, 'root', root, 'node', node)
                     const parentKey = root.find(el => el === node).parent
                     const parentId = root.find(el => el.nodeKey === parentKey).node
                     vm.menuData = {

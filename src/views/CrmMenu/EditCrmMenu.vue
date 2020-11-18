@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import { menueDetailApi, menuEditApi } from '@/api/MenuManageApi'
+  import { CrmMenuDetailApi, CrmMenuEditApi } from '@/api/CrmMenuApi'
 
   export default {
     props: {
@@ -54,8 +54,8 @@
     methods: {
       // 获取详情
       getMenuDetils () {
-        menueDetailApi({
-          menuId: this.menuData.menuId
+        CrmMenuDetailApi({
+          systemMenuId: this.menuData.systemMenuId
         }).then(res => {
           this.formValidate = res.data.data
         })
@@ -64,8 +64,8 @@
       modalOk () {
         this.$refs.formValidate.validate((valid) => {
           if (valid) {
-            menuEditApi({
-              menuId: this.formValidate.menuId,
+            CrmMenuEditApi({
+              systemMenuId: this.formValidate.systemMenuId,
               parentId: this.formValidate.parentId,
               icon: this.formValidate.icon,
               menuUrl: this.formValidate.menuUrl,

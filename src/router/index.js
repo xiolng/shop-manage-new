@@ -27,7 +27,8 @@ const routes = [
         component: () => import('@/views/Home'),
         meta: {
           name: '概况',
-          icon: 'bar-chart'
+          icon: 'bar-chart',
+          activeUrl: '/'
         }
       },
       {

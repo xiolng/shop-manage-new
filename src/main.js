@@ -59,21 +59,21 @@ const router = new VueRouter({
   routes
 })
 // 路由拦截
-router.beforeEach((to, from, next) => {
-  const menuData = JSON.parse(localStorage.getItem('menuData'))
-  const noAuth = ['/', '/signin', '/403', '/404']
-  if (!menuData) {
-    next()
-    return
-  }
-  let isAuth = !!noAuth.includes(to.path) || false
-  menuData && menuData.map(v => {
-    if (to.path.includes(v.menuUrl)) {
-      isAuth = true
-    }
-  })
-  isAuth ? next() : router.replace('/403')
-})
+// router.beforeEach((to, from, next) => {
+//   const menuData = JSON.parse(localStorage.getItem('menuData'))
+//   const noAuth = ['/', '/signin', '/403', '/404']
+//   if (!menuData) {
+//     next()
+//     return
+//   }
+//   let isAuth = !!noAuth.includes(to.path) || false
+//   menuData && menuData.map(v => {
+//     if (to.path.includes(v.menuUrl)) {
+//       isAuth = true
+//     }
+//   })
+//   isAuth ? next() : router.replace('/403')
+// })
 new Vue({
   router,
   store,

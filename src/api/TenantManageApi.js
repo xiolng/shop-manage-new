@@ -9,7 +9,7 @@ import Http from '@/api/Http'
 const BASE_URL = `system`
 // 获取列表
 export const tenantListApi = data => Http.post(
-  `${BASE_URL}/tenant/tenantPage`,
+  `${BASE_URL}/tenant/pageTenant`,
   data
 )
 // 全部列表
@@ -19,7 +19,7 @@ export const tenantAllListlApi = params => Http.get(
 )
 // 详情
 export const tenanteDetailApi = params => Http.get(
-  `${BASE_URL}/tenant/tenantById`,
+  `${BASE_URL}/tenant/getTenant`,
   { params }
 )
 // 新建
@@ -38,17 +38,35 @@ export const tenantDeleteApi = params => Http.get(
   { params }
 )
 
-// 导入用户
-export const importUserApi = data => Http.request({
-  url: `system/questionUser/importUser`,
-  data,
-  method: 'post',
-  processData: false,
-})
-// 导出模板
-export const exportUserApi = data => Http.request({
-  url: `system/questionUser/downloadTemplate`,
-  data,
-  method: 'get',
-  responseType: 'blob'
-})
+// 启用
+export const tenantEnableApi = params => Http.get(
+  `${BASE_URL}/tenant/enableTenant`,
+  { params }
+)
+
+// 禁用
+export const tenantDisableApi = params => Http.get(
+  `${BASE_URL}/tenant/disableTenant`,
+  { params }
+)
+
+// 分页查询租户用户信息
+export const pageTenantUserApi = data => Http.post(
+  `${BASE_URL}/tenantUser/pageTenantUser`,
+  data
+)
+// 分页查询租户服务列表
+export const pageTenantSystemServiceApi = data => Http.post(
+  `${BASE_URL}/tenantSystemService/pageTenantSystemService`,
+  data
+)
+// 开通服务
+export const openTenantSystemServiceApi = data => Http.post(
+  `${BASE_URL}/tenantSystemService/openTenantSystemService`,
+  data
+)
+// 开通服务
+export const getSystemServiceApi = params => Http.get(
+  `${BASE_URL}/tenantSystemService/getSystemService`,
+  { params }
+)

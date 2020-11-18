@@ -141,11 +141,13 @@
         usereDetailApi({
           userId: this.isEdit
         }).then(res => {
-          if (res.data.code === '200') {
+          console.log(res)
+          const { data, code } = res.data
+          if (code === '200') {
             Object.keys(this.formData).map(v => {
-              this.formData[v] = res.data.data[v]
+              this.formData[v] = data[v]
             })
-            this.formData.roleIds = res.data.data.roles.map(v => v.roleId)
+            data.roles && (this.formData.roleIds = data.roles.map(v => v.roleId))
             this.form.setFieldsValue(this.formData)
           }
         })

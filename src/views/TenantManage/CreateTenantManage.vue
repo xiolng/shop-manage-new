@@ -22,24 +22,46 @@
             ]"
           />
         </a-form-item>
-        <a-form-item label="主用户名称">
+        <a-form-item label="用户名">
           <a-input
-            placeholder="请输入主用户名称"
+            placeholder="请输入用户名"
             v-decorator="[
-              `mainUser`,
+              `username`,
               {
-                rules: [{required: true, message: '请输入主用户名称'}]
+                rules: [{required: true, message: '请输入用户名'}]
               }
             ]"
           />
         </a-form-item>
-        <a-form-item label="主用户联系电话">
-          <a-input
-            placeholder="请输入主用户联系电话"
+        <a-form-item label="密码">
+          <a-input-password
+            placeholder="请输入密码"
             v-decorator="[
-              `mainUserPhone`,
+              `password`,
               {
-                rules: [{required: true, message: '请输入主用户联系电话'}]
+                rules: [{required: true, message: '请输入密码'}]
+              }
+            ]"
+          />
+        </a-form-item>
+        <a-form-item label="真实姓名">
+          <a-input
+            placeholder="请输入真实姓名"
+            v-decorator="[
+              `realName`,
+              {
+                rules: [{required: true, message: '请输入真实姓名'}]
+              }
+            ]"
+          />
+        </a-form-item>
+        <a-form-item label="联系电话">
+          <a-input
+            placeholder="请输入联系电话"
+            v-decorator="[
+              `phone`,
+              {
+                rules: [{required: true, message: '请输入联系电话'}]
               }
             ]"
           />
@@ -50,8 +72,19 @@
             v-decorator="[
               `tenantStatus`,
               {
-                rules: [{required: true, message: '请输入租户状态'}]
+                initialValue: true,
+                valuePropName: 'checked'
               }
+            ]"
+          />
+        </a-form-item>
+        <a-form-item label="租户描述">
+          <a-textarea
+            min="2"
+            max="4"
+            placeholder="请输入租户描述"
+            v-decorator="[
+              `tenantDetail`
             ]"
           />
         </a-form-item>
@@ -61,9 +94,6 @@
 </template>
 
 <script>
-  import { BannerGetByIdApi } from '@/api/BannerApi'
-  import { ComboGetlistIdNameApi } from '@/api/ComboManageApi'
-  import { ShopGetlistIdNameApi } from '@/api/ShopManageApi'
   import { tenanteDetailApi } from '@/api/TenantManageApi'
 
   export default {
@@ -88,32 +118,19 @@
     methods: {
       getDetail () {
         tenanteDetailApi({ id: this.editId }).then(res => {
-          const defualtData = ['imageUrl', 'type', 'relationId', 'imageOrder']
+          const defualtData = ['password', 'phone', 'realName', 'tenantDetail', 'tenantName', 'tenantStatus', 'username']
           if (res.data.code === '200') {
             const { data } = res.data
-            Object.keys(defualtData).map(v => {
-              this.form.setFieldsValue({ [defualtData[v]]: data[defualtData[v]] })
+            Object.values(defualtData).map(v => {
+              if (v === 'tenantStatus') {
+                this.form.setFieldsValue({ [v]: !!data[v] })
+              } else {
+                this.form.setFieldsValue({ [v]: data[v] })
+              }
             })
-            this.shopList = [{
-              id: data.relationId,
-              name: data.relationName
-            }]
           }
         })
       },
-      // 获取号池
-      setSelect () {
-        const type = this.form.getFieldValue('type')
-        this.showDrawer = true
-        this.selectList = [this.form.getFieldValue('relationId') || '']
-        this.func = type === '0' ? ComboGetlistIdNameApi : ShopGetlistIdNameApi
-      },
-      setPool ({ item }) {
-        this.shopList = item
-        this.form.setFieldsValue({ relationId: item[0].id })
-        this.showDrawer = false
-        this.$forceUpdate()
-      }
     },
   }
 </script>

@@ -18,9 +18,9 @@
         <!--注册-->
         <register v-if="isRegister"/>
         <!--按钮切换-->
-        <!--<div class="register-txt" @click="isRegister = !isRegister">-->
-        <!--  {{isRegister ? `立即登录`:`注册新用户`}}-->
-        <!--</div>-->
+        <div class="register-txt" @click="isRegister = !isRegister">
+          {{isRegister ? `立即登录`:`注册新用户`}}
+        </div>
       </div>
     </div>
   </div>

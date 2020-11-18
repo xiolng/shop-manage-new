@@ -32,6 +32,30 @@
       rowKey="systemServiceId"
       @change="pageChange"
     >
+      <div slot="specList" slot-scope="text">
+        <div v-for="item in text" :key="item.systemServiceSpecId">
+          <a-row type="flex">
+            <a-col>
+              人数：{{item.personCount}}
+            </a-col>
+            <a-col>
+              价格：{{item.price}}
+            </a-col>
+          </a-row>
+        </div>
+      </div>
+      <div slot="subList" slot-scope="text">
+        <div v-for="item in text" :key="item.systemServiceSpecId">
+          <a-row type="flex">
+            <a-col>
+              月数：{{item.monthCount}}
+            </a-col>
+            <a-col>
+              折扣比率：{{item.discountRate}}
+            </a-col>
+          </a-row>
+        </div>
+      </div>
       <div slot="operation" slot-scope="text, record">
         <a-row type="flex">
           <a-col>
@@ -66,10 +90,6 @@
 
   const column = [
     {
-      title: '服务id',
-      dataIndex: 'systemServiceId'
-    },
-    {
       title: '服务名称',
       dataIndex: 'serviceName'
     },
@@ -79,11 +99,13 @@
     },
     {
       title: '服务规格',
-      dataIndex: 'serviceName'
+      dataIndex: 'specList',
+      scopedSlots: { customRender: 'specList' }
     },
     {
       title: '服务折扣',
-      dataIndex: 'serviceDetail'
+      dataIndex: 'subList',
+      scopedSlots: { customRender: 'subList' }
     },
     {
       title: '更新人',
@@ -117,12 +139,14 @@
       return {
         column,
         pages: {
-          current: 1,
-          pageSize: 10,
+          current: 2,
+          pageSize: 1,
           total: 0, // 总条数
           showSizeChanger: true
         }, // 分页
-        searchName: {}, // 搜索关键字
+        searchName: {
+          serviceName: ''
+        }, // 搜索关键字
         dataSource: [],
         visible: false,
         isEdit: ''

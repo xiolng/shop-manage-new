@@ -177,7 +177,7 @@
       // 获取菜单列表
       getMenuData () {
         menuAllListlApi({}).then(res => {
-          this.menuData = treeMenu(res.data.data)
+          this.menuData = treeMenu(res.data.data, 'menuId')
         })
       },
       // 获取详情

@@ -70,7 +70,7 @@
     methods: {
       getList () {
         menuAllListlApi().then(res => {
-          this.treeList[0].children = treeMenu(res.data.data)
+          this.treeList[0].children = treeMenu(res.data.data, 'menuId')
         })
       },
       // 添加菜单

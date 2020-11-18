@@ -17,22 +17,13 @@
         />
       </a-form-item>
       <a-form-item label="服务折扣">
-        <a-select
-          v-decorator="[
-            `serviceSale`,
-            {
-              initialValue: undefined,
-              rules: [{required: true, message: '请选择折扣'}]
-            }
-          ]"
-          placeholder="请选择折扣"
-        >
-          <a-select-option value="wef">wef</a-select-option>
-        </a-select>
+        <a-card>
+          <service-discounts ref="serviceDiscount" :limit-list="subList" />
+        </a-card>
       </a-form-item>
       <a-form-item label="服务人数">
         <a-card>
-          <service-arr ref="serviceArr" :limit-list="limitList" />
+          <service-arr ref="serviceArr" :limit-list="specList" />
         </a-card>
       </a-form-item>
       <a-form-item label="服务描述">
@@ -57,7 +48,7 @@
           placeholder="请选择商品类别"
           v-decorator="[
             `shopType`,
-            {rules: [{required: true, message: '请选择商品类别'}]}
+            // {rules: [{required: true, message: '请选择商品类别'}]}
           ]"
         />
       </a-form-item>
@@ -81,15 +72,20 @@
   import { SystemServiceAddApi, SystemServiceeDetailApi } from '@/api/SystemServiceApi'
   import { menuAllListlApi } from '@/api/MenuManageApi'
   import { treeMenu } from '@/utils/menu'
+  import ServiceDiscounts from '@/views/SystemService/ServiceDiscounts'
 
   export default {
     name: 'EditService',
-    components: { ServiceArr },
+    components: {
+      ServiceDiscounts,
+      ServiceArr
+    },
     data () {
       return {
         form: this.$form.createForm(this, {}),
         loading: false,
-        limitList: [],
+        specList: [],
+        subList: [],
         showParent: TreeSelect.SHOW_ALL,
         menuData: []
       }
@@ -101,51 +97,80 @@
     methods: {
       getDetail () {
         SystemServiceeDetailApi({
-          systemServiceId: this.$route.query.id
+          id: this.$route.query.id
         }).then(res => {
           if (res.data.code === '200') {
             const { data } = res.data
-            this.limitList = data.limitList
+            this.specList = data.specList
+            this.subList = data.subList || []
+            this.form.setFieldsValue({
+              serviceName: data.serviceName,
+              serviceDetail: data.serviceDetail
+            })
           }
         })
       },
       // 获取菜单列表
       getMenuData () {
         menuAllListlApi({}).then(res => {
-          this.menuData = treeMenu(res.data.data)
+          this.menuData = treeMenu(res.data.data, 'menuId')
         })
       },
       saveForm () {
         this.loading = true
-        this.form.validateFields((errForm, valForm) => {
+        this.form.validateFieldsAndScroll({
+          first: true,
+          scroll: {
+            offsetTop: 100
+          }
+        }, (errForm, valForm) => {
           console.log(errForm, valForm)
           if (!errForm) {
             this.$refs.serviceArr.form.validateFields((err, val) => {
               console.log(err, val)
               if (!err) {
                 console.log(4444)
-                const limitList = val.keys.map(v => {
+                const specList = val.keys.map(v => {
                   console.log(v)
                   return {
                     peopleNum: val.peopleNum[v],
                     servicePrice: val.servicePrice[v],
                   }
                 })
-                console.log(5555, limitList)
-                SystemServiceAddApi({
-                  limitList,
-                  ...valForm
-                }).then(res => {
-                  this.loading = false
-                  if (res.data.code === '200') {
-                    this.$message.success(`添加成功`)
-                    this.$router.push({
-                      path: `/systemService/systemServiceList`
+                console.log(5555, specList)
+                this.$refs.serviceDiscount.form.validateFields((errDis, valDis) => {
+                  console.log(errDis, valDis)
+                  if (!errDis) {
+                    const subList = valDis.keys.map(d => {
+                      console.log(d)
+                      return {
+                        monthCount: valDis.monthCount[d],
+                        discountRate: valDis.discountRate[d]
+                      }
                     })
+                    SystemServiceAddApi({
+                      subList,
+                      specList,
+                      ...valForm
+                    }).then(res => {
+                      this.loading = false
+                      if (res.data.code === '200') {
+                        this.$message.success(`添加成功`)
+                        this.$router.push({
+                          path: `/systemService/systemServiceList`
+                        })
+                      }
+                    })
+                  } else {
+                    this.loading = false
                   }
                 })
+              } else {
+                this.loading = false
               }
             })
+          } else {
+            this.loading = false
           }
         })
       }

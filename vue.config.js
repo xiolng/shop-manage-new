@@ -74,7 +74,7 @@ module.exports = {
       //   secure: false
       // },
       '/*': {
-        target: 'http://182.92.160.69:7777'
+        target: 'http://49.232.173.25:7777/'
         // target: 'http://jiadacc.com'
       },
     }

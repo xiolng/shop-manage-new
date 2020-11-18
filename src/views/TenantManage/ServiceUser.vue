@@ -3,7 +3,7 @@
 <!--2020/10/29-->
 <!--16:27-->
 <template>
-  <div class="ServiceUser">
+  <div class="ServiceUser, main-content">
     <!--筛选、添加-->
     <a-row type="flex" justify="space-between" align="top" class="mb-20">
       <a-col span="20">
@@ -63,19 +63,19 @@
       dataIndex: 'realname'
     },
     {
-      title: '角色',
-      dataIndex: 'roleIds'
+      title: '是否主用户',
+      dataIndex: 'isMain'
     },
     {
       title: '手机',
       dataIndex: 'phone'
     },
-    {
-      title: '操作',
-      dataIndex: 'operation',
-      width: '20%',
-      scopedSlots: { customRender: 'operation' }
-    }
+    // {
+    //   title: '操作',
+    //   dataIndex: 'operation',
+    //   width: '20%',
+    //   scopedSlots: { customRender: 'operation' }
+    // }
   ]
   export default {
     name: 'ServiceUser',
@@ -93,12 +93,16 @@
         dataSource: [],
       }
     },
+    mounted () {
+      this.getList()
+    },
     methods: {
       // 获取列表
       getList () {
         userListApi({
           ...this.pages,
-          ...this.searchName
+          ...this.searchName,
+          tenantId: this.$route.query.id
         }).then(res => {
           const { data, code, total } = res.data
           if (code === '200') {

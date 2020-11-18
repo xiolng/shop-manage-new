@@ -9,7 +9,7 @@ import Http from '@/api/Http'
 const BASE_URL = `/system`
 // 获取列表
 export const SystemServiceListApi = data => Http.post(
-  `${BASE_URL}/systemService/systemServicePage`,
+  `${BASE_URL}/systemService/pageSystemService`,
   data
 )
 // 全部列表
@@ -19,7 +19,7 @@ export const SystemServiceAllListlApi = params => Http.get(
 )
 // 详情
 export const SystemServiceeDetailApi = params => Http.get(
-  `${BASE_URL}/systemService/getSystemServiceById`,
+  `${BASE_URL}/systemService/getSystemService`,
   { params }
 )
 // 新建

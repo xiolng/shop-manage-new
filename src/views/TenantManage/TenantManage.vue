@@ -27,7 +27,7 @@
       :columns="column"
       :dataSource="dataSource"
       :pagination="pages"
-      rowKey="id"
+      rowKey="tenantId"
       @change="pageChange"
     >
       <div slot="serviceManage" slot-scope="text">
@@ -39,13 +39,13 @@
         >服务管理
         </a-button>
       </div>
-      <div slot="serviceGet" slot-scope="text">
+      <div slot="serviceGet" slot-scope="text, record">
         <a-button
           type="primary"
           size="small"
           class="mr-10"
           @click="$router.push({
-          path: `/tenantManage/serviceGet`
+          path: `/tenantManage/serviceGet?id=${record.tenantId}`
           })"
         >查询服务
         </a-button>
@@ -61,12 +61,14 @@
         >查询用户
         </a-button>
       </div>
-      <div slot="tenantStatus" slot-scope="text">
+      <div slot="tenantStatus" slot-scope="text, record">
         <a-switch
-          :checked="text"
+          :checked="!!text"
+          :loading="tenantStatusLoading"
           class="mr-10"
           checked-children="是"
           un-checked-children="否"
+          @click="setTenantStatus(record)"
         />
       </div>
       <div slot="operation" slot-scope="text, record">
@@ -113,7 +115,13 @@
 <script>
 
   import SearchC from '@/components/SearchC/SearchC'
-  import { tenantAddApi, tenantDeleteApi, tenantListApi } from '@/api/TenantManageApi'
+  import {
+    tenantAddApi,
+    tenantDeleteApi,
+    tenantDisableApi,
+    tenantEnableApi,
+    tenantListApi
+  } from '@/api/TenantManageApi'
   import CreateTenantManage from '@/views/TenantManage/CreateTenantManage'
   import ServiceManage from '@/views/TenantManage/ServiceManage'
 
@@ -182,7 +190,9 @@
         visible: false,
         // 服务管理
         isService: false,
-        editId: ''
+        editId: '',
+        // 启用、禁用修改loading
+        tenantStatusLoading: false
       }
     },
     mounted () {
@@ -207,14 +217,32 @@
           if (!err) {
             console.log(val)
             tenantAddApi({
-              ...val
+              ...val,
+              tenantStatus: +val.tenantStatus
             }).then(res => {
               if (res.data.code === '200') {
                 this.$message.success(`保存成功`)
+                this.$refs.createTenantManage.form.resetFields()
+                this.visible = false
                 this.getList()
               }
             })
           }
+        })
+      },
+      setTenantStatus (item) {
+        this.tenantStatusLoading = true
+        const func = item.tenantStatus ? tenantDisableApi : tenantEnableApi
+        func({
+          id: item.tenantId,
+        }).then(res => {
+          this.tenantStatusLoading = false
+          if (res.data.code === '200') {
+            this.$message.success(`${item.tenantStatus ? '禁用' : '启用'}成功`)
+            this.getList()
+          }
+        }).catch(() => {
+          this.tenantStatusLoading = false
         })
       },
       /**
@@ -225,7 +253,7 @@
         tenantDeleteApi({
           id
         }).then(res => {
-          const { code } = res
+          const { code } = res.data
           if (code === '200') {
             this.$message.success('删除成功')
             this.getList()

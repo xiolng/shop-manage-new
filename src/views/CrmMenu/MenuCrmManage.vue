@@ -70,7 +70,7 @@
     methods: {
       getList () {
         CrmMenuAllListlApi().then(res => {
-          this.treeList[0].children = treeMenu(res.data.data)
+          this.treeList[0].children = treeMenu(res.data.data, 'systemMenuId')
         })
       },
       // 添加菜单
@@ -88,13 +88,13 @@
        */
       removeRole (data) {
         this.removeName = data.menuName
-        this.removeRoleId = data.menuId
+        this.removeRoleId = data.systemMenuId
         this.showModal = true
         this.showDel = true
       },
       delRole () {
         CrmMenuDeleteApi({
-          menuId: this.removeRoleId
+          systemMenuId: this.removeRoleId
         }).then(res => {
           if (res.data.code === '200') {
             this.getList()

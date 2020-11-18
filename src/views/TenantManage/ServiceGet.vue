@@ -51,24 +51,25 @@
 <script>
 
   import SearchC from '@/components/SearchC/SearchC'
-  import { userDeleteApi, userListApi } from '@/api/userManageApi'
+  import { userDeleteApi } from '@/api/userManageApi'
+  import { pageTenantSystemServiceApi } from '@/api/TenantManageApi'
 
   const column = [
     {
-      title: '用户名',
-      dataIndex: 'username'
+      title: '服务名称',
+      dataIndex: 'serviceName'
     },
     {
-      title: '姓名',
-      dataIndex: 'realname'
+      title: '服务状态',
+      dataIndex: 'serviceStatus'
     },
     {
-      title: '角色',
-      dataIndex: 'roleIds'
+      title: '服务描述',
+      dataIndex: 'serviceDetail'
     },
     {
-      title: '手机',
-      dataIndex: 'phone'
+      title: '人数',
+      dataIndex: 'personCount'
     },
     {
       title: '操作',
@@ -93,12 +94,16 @@
         dataSource: [],
       }
     },
+    mounted () {
+      this.getList()
+    },
     methods: {
       // 获取列表
       getList () {
-        userListApi({
+        pageTenantSystemServiceApi({
           ...this.pages,
-          ...this.searchName
+          ...this.searchName,
+          tenantId: this.$route.query.id
         }).then(res => {
           const { data, code, total } = res.data
           if (code === '200') {
