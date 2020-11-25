@@ -65,8 +65,20 @@ export const openTenantSystemServiceApi = data => Http.post(
   `${BASE_URL}/tenantSystemService/openTenantSystemService`,
   data
 )
-// 开通服务
+// 查询服务列表
 export const getSystemServiceApi = params => Http.get(
   `${BASE_URL}/tenantSystemService/getSystemService`,
+  { params }
+)
+
+// 租户启用服务
+export const enableTenantSystemServiceApi = params => Http.get(
+  `${BASE_URL}/tenantSystemService/enableTenantSystemService`,
+  { params }
+)
+
+// 租户禁用服务
+export const disableTenantSystemServiceApi = params => Http.get(
+  `${BASE_URL}/tenantSystemService/disableTenantSystemService`,
   { params }
 )

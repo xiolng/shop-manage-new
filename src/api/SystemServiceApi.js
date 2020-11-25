@@ -38,6 +38,37 @@ export const SystemServiceDeleteApi = params => Http.get(
   { params }
 )
 
+// 服务折扣-获取列表
+export const pageSystemServiceDiscountApi = data => Http.post(
+  `${BASE_URL}/systemServiceDiscount/pageSystemServiceDiscount`,
+  data
+)
+// 服务折扣-全部列表
+export const listSystemServiceDiscountApi = params => Http.get(
+  `${BASE_URL}/systemServiceDiscount/listSystemServiceDiscount`,
+  { params }
+)
+// 服务折扣-详情
+export const getSystemServiceDiscountApi = params => Http.get(
+  `${BASE_URL}/systemServiceDiscount/getSystemServiceDiscount`,
+  { params }
+)
+// 服务折扣-新建
+export const saveSystemServiceDiscountApi = data => Http.post(
+  `${BASE_URL}/systemServiceDiscount/saveSystemServiceDiscount`,
+  data
+)
+// 服务折扣-编辑
+export const updateSystemServiceDiscountApi = data => Http.post(
+  `${BASE_URL}/systemServiceDiscount/updateSystemServiceDiscount`,
+  data
+)
+// 服务折扣-删除
+export const deleteSystemServiceDiscountApi = params => Http.get(
+  `${BASE_URL}/systemServiceDiscount/deleteSystemServiceDiscount`,
+  { params }
+)
+
 // 导入用户
 export const importUserApi = data => Http.request({
   url: `/system/questionUser/importUser`,

@@ -3,14 +3,14 @@
 <!--2020/10/29-->
 <!--16:27-->
 <template>
-  <div class="ServiceGet">
+  <div class="ServiceGet main-content">
     <!--筛选、添加-->
     <a-row type="flex" justify="space-between" align="top" class="mb-20">
       <a-col span="20">
         <search-c
           @get-list="getSearch"
           :search-list="[
-            {name: '用户名', key: 'username'}
+            {name: '服务名称', key: 'username'}
             ]"
         />
       </a-col>
@@ -20,27 +20,19 @@
       :columns="column"
       :dataSource="dataSource"
       :pagination="pages"
-      rowKey="id"
+      rowKey="tenantSystemServiceId"
       @change="pageChange"
     >
       <div slot="operation" slot-scope="text, record">
         <a-row type="flex">
           <a-col>
-            <a-button
-              type="primary"
-              size="small"
-              class="mr-10"
-              @click="visible = !visible, isEdit = record.id"
-            >编辑
-            </a-button>
-          </a-col>
-          <a-col>
-            <a-popconfirm
-              title="确定要删除吗？"
-              @confirm="deleteItem(record.id)"
-            >
-              <a-button type="danger" size="small">删除</a-button>
-            </a-popconfirm>
+            <a-switch
+              checked-children="开"
+              un-checked-children="关"
+              :checked="!!text"
+              :loading="record.loading"
+              @click="clickActive(record)"
+            />
           </a-col>
         </a-row>
       </div>
@@ -52,16 +44,16 @@
 
   import SearchC from '@/components/SearchC/SearchC'
   import { userDeleteApi } from '@/api/userManageApi'
-  import { pageTenantSystemServiceApi } from '@/api/TenantManageApi'
+  import {
+    disableTenantSystemServiceApi,
+    enableTenantSystemServiceApi,
+    pageTenantSystemServiceApi
+  } from '@/api/TenantManageApi'
 
   const column = [
     {
       title: '服务名称',
       dataIndex: 'serviceName'
-    },
-    {
-      title: '服务状态',
-      dataIndex: 'serviceStatus'
     },
     {
       title: '服务描述',
@@ -72,8 +64,8 @@
       dataIndex: 'personCount'
     },
     {
-      title: '操作',
-      dataIndex: 'operation',
+      title: '服务状态',
+      dataIndex: 'serviceStatus',
       width: '20%',
       scopedSlots: { customRender: 'operation' }
     }
@@ -109,6 +101,19 @@
           if (code === '200') {
             this.dataSource = data
             this.pages.total = total
+          }
+        })
+      },
+      clickActive (item) {
+        item.loading = true
+        const func = item.serviceStatus ? disableTenantSystemServiceApi : enableTenantSystemServiceApi
+        func({
+          tenantSystemServiceId: item.tenantSystemServiceId
+        }).then(res => {
+          if (res.data.code === '200') {
+            item.loading = false
+            this.$message.success(`操作成功`)
+            this.getList()
           }
         })
       },

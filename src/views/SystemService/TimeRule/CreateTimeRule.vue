@@ -15,7 +15,7 @@
           <a-input
             placeholder="请输入规则名称"
             v-decorator="[
-              `ruleName`,
+              `discountName`,
               {
                 rules: [{required: true, message: '请输入规则名称'}]
               }
@@ -27,7 +27,7 @@
             :auto-size="{minRows: 2, maxRows: 4}"
             placeholder="请输入规则描述"
             v-decorator="[
-              `ruleName`,
+              `serviceDiscountDetail`,
               {
                 rules: [{required: true, message: '请输入规则描述'}]
               }
@@ -40,7 +40,7 @@
         >
           <rule-arr
             ref="ruleArr"
-            :limit-list="limitList"
+            :limit-list="discountSubList"
           />
         </a-form-item>
       </a-form>
@@ -49,8 +49,8 @@
 </template>
 
 <script>
-  import { BannerGetByIdApi } from '@/api/BannerApi'
   import RuleArr from '@/views/SystemService/TimeRule/RuleArr'
+  import { getSystemServiceDiscountApi } from '@/api/SystemServiceApi'
 
   export default {
     name: 'CreateTimeRule',
@@ -64,7 +64,7 @@
     data () {
       return {
         form: this.$form.createForm(this, { name: 'form' }),
-        shopList: [],
+        discountSubList: [],
         poolList: [],
         showDrawer: false,
         func: null,
@@ -77,17 +77,14 @@
     },
     methods: {
       getDetail () {
-        BannerGetByIdApi({ id: this.editId }).then(res => {
-          const defualtData = ['imageUrl', 'type', 'relationId', 'imageOrder']
+        getSystemServiceDiscountApi({ id: this.editId }).then(res => {
+          const defualtData = ['discountName', 'serviceDiscountDetail']
           if (res.data.code === '200') {
             const { data } = res.data
             Object.keys(defualtData).map(v => {
               this.form.setFieldsValue({ [defualtData[v]]: data[defualtData[v]] })
             })
-            this.shopList = [{
-              id: data.relationId,
-              name: data.relationName
-            }]
+            this.discountSubList = data.discountSubList
           }
         })
       },

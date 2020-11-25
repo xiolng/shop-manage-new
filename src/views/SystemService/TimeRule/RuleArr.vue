@@ -24,14 +24,15 @@
             >
             </a-button>
           </div>
-          <a-form-item label="数量">
+          <a-form-item label="月数">
             <a-input-number
-              placeholder="请输入数量"
+              placeholder="请输入月数"
+              :min="1"
               v-decorator="[
-              `peopleNum[${k}]`,
+              `monthCount[${k}]`,
               {
-                initialValue: peopleNum[k],
-                rules: [{required: true, message: '请输入数量'}]
+                initialValue: monthCount[k],
+                rules: [{required: true, message: '请输入月数'}]
               }
             ]"
             />
@@ -39,10 +40,11 @@
           <a-form-item label="折扣比率">
             <a-input-number
               placeholder="请输入折扣比率"
+              :min="1"
               v-decorator="[
-              `servicePrice[${k}]`,
+              `discountRate[${k}]`,
               {
-                initialValue: servicePrice[k],
+                initialValue: discountRate[k],
                 rules: [{required: true, message: '请输入折扣比率'}]
               }
             ]"
@@ -70,8 +72,8 @@
     },
     data () {
       return {
-        servicePrice: [],
-        peopleNum: [],
+        discountRate: [],
+        monthCount: [],
       }
     },
     beforeCreate () {
@@ -86,20 +88,16 @@
       const { form } = this
       this.$watch(
         'limitList', function (val, oldVal) {
-          if (!vm.limitList.length) {
-            console.log(val, oldVal, val.length)
-            val.length && val.map((v, index) => {
-              const keys = form.getFieldValue('keys')
-              const nextKeys = keys.concat(id++)
-              vm.servicePrice[index] = v.servicePrice
-              vm.peopleNum[index] = v.peopleNum
-              form.setFieldsValue({
-                keys: nextKeys,
-                servicePrice: vm.servicePrice,
-                peopleNum: vm.peopleNum,
-              })
+          id = 1;
+          val.length && val.map((v, index) => {
+            const keys = form.getFieldValue('keys')
+            const nextKeys = index >= 1 ? keys.concat(id++) : keys
+            vm.discountRate[index] = v.discountRate
+            vm.monthCount[index] = v.monthCount
+            form.setFieldsValue({
+              keys: nextKeys
             })
-          }
+          })
         }, {
           deep: true,
           immediate: true

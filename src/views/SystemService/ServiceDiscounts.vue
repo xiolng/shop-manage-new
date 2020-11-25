@@ -24,6 +24,7 @@
         <a-form-item label="月数">
           <a-input-number
             placeholder="请输入月数"
+            :min="1"
             v-decorator="[
               `monthCount[${k}]`,
               {
@@ -36,6 +37,7 @@
         <a-form-item label="折扣比率">
           <a-input-number
             placeholder="请输入折扣比率"
+            :min="1"
             v-decorator="[
               `discountRate[${k}]`,
               {

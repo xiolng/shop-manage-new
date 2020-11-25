@@ -24,10 +24,11 @@
         <a-form-item label="人数">
           <a-input-number
             placeholder="请输入人数"
+            :min="1"
             v-decorator="[
-              `peopleNum[${k}]`,
+              `personCount[${k}]`,
               {
-                initialValue: peopleNum[k],
+                initialValue: personCount[k],
                 rules: [{required: true, message: '请输入人数'}]
               }
             ]"
@@ -36,10 +37,11 @@
         <a-form-item label="价格">
           <a-input-number
             placeholder="请输入价格"
+            :min="1"
             v-decorator="[
-              `servicePrice[${k}]`,
+              `price[${k}]`,
               {
-                initialValue: servicePrice[k],
+                initialValue: price[k],
                 rules: [{required: true, message: '请输入价格'}]
               }
             ]"
@@ -66,8 +68,8 @@
     },
     data () {
       return {
-        servicePrice: [],
-        peopleNum: [],
+        price: [],
+        personCount: [],
       }
     },
     beforeCreate () {
@@ -82,20 +84,16 @@
       const { form } = this
       this.$watch(
         'limitList', function (val, oldVal) {
-          if (!this.limitList.length) {
-            console.log(val, oldVal, val.length)
-            val.length && val.map((v, index) => {
-              const keys = form.getFieldValue('keys')
-              const nextKeys = keys.concat(id++)
-              vm.servicePrice[index] = v.servicePrice
-              vm.peopleNum[index] = v.peopleNum
-              form.setFieldsValue({
-                keys: nextKeys,
-                servicePrice: vm.servicePrice,
-                peopleNum: vm.peopleNum,
-              })
+          id = 1
+          val.length && val.map((v, index) => {
+            const keys = form.getFieldValue('keys')
+            const nextKeys = index >= 1 ? keys.concat(id++) : keys
+            vm.price[index] = v.price
+            vm.personCount[index] = v.personCount
+            form.setFieldsValue({
+              keys: nextKeys,
             })
-          }
+          })
         }, {
           deep: true,
           immediate: true

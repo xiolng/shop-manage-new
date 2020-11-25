@@ -8,7 +8,7 @@
       :visible="visible"
       title="开通服务"
       @cancel="$emit('cancel')"
-      @ok="$emit('create')"
+      @ok="saveForm"
     >
       <a-form :form="form" :label-col="{span: 4}" :wrapper-col="{span: 16}">
         <a-form-item label="服务">
@@ -18,14 +18,13 @@
               {initialValue: 'b'}
               ]"
           >
-            <a-radio-button value="a">
-              基础版
-            </a-radio-button>
-            <a-radio-button value="b">
-              升级版
-            </a-radio-button>
-            <a-radio-button value="c">
-              尊贵版
+            <a-radio-button
+              v-for="item in serviceList"
+              :key="item.systemServiceId"
+              :value="item.systemServiceId"
+              @click="selectService = item"
+            >
+              {{item.serviceName}}
             </a-radio-button>
           </a-radio-group>
         </a-form-item>
@@ -37,17 +36,13 @@
               {initialValue: '5'}
               ]"
           >
-            <a-radio value="3">
-              3人
-            </a-radio>
-            <a-radio value="5">
-              5人
-            </a-radio>
-            <a-radio value="10">
-              10人
-            </a-radio>
-            <a-radio value="15">
-              15人
+            <a-radio
+              v-for="item in selectService.specList"
+              :key="item.systemServiceSpecId"
+              :value="item.systemServiceSpecId"
+              @click="specData = item"
+            >
+              {{item.personCount}}人
             </a-radio>
           </a-radio-group>
         </a-form-item>
@@ -59,56 +54,32 @@
               {initialValue: '6'}
               ]"
           >
-            <a-radio value="1">
-              1个月
-            </a-radio>
-            <a-radio value="2">
-              2个月
-            </a-radio>
-            <a-radio value="3">
-              3个月
-            </a-radio>
-            <a-radio value="6">
-              6个月
-            </a-radio>
-            <a-radio value="12">
-              1年
+            <a-radio
+              v-for="item in selectService.subList"
+              :key="item.monthCount"
+              :value="item.monthCount"
+              @click="subData = item"
+            >
+              {{item.monthCount}}月
             </a-radio>
           </a-radio-group>
         </a-form-item>
 
         <a-form-item label="价格">
           <div style="color: #dd4a68">
-            ￥4000 元
+            ￥{{allPrice}} 元
           </div>
         </a-form-item>
       </a-form>
     </a-modal>
-    <select-type-drawer
-      v-if="showDrawer"
-      :func="func"
-      :visible="showDrawer"
-      :select-list="selectList"
-      @cancel="showDrawer = false"
-      @create="setPool"
-      check-type="radio"
-    />
   </div>
 </template>
 
 <script>
-  import UploadImgC from '@/components/UploadImgC/UploadImgC'
-  import { BannerGetByIdApi } from '@/api/BannerApi'
-  import { ComboGetlistIdNameApi } from '@/api/ComboManageApi'
-  import { ShopGetlistIdNameApi } from '@/api/ShopManageApi'
-  import SelectTypeDrawer from '@/components/SelectTypeDrawer'
+  import { getSystemServiceApi, openTenantSystemServiceApi } from '@/api/TenantManageApi'
 
   export default {
     name: 'ServiceManage',
-    components: {
-      SelectTypeDrawer,
-      UploadImgC
-    },
     props: {
       visible: Boolean,
       editId: String
@@ -116,46 +87,56 @@
     data () {
       return {
         form: this.$form.createForm(this, { name: 'form' }),
-        shopList: [],
-        poolList: [],
-        showDrawer: false,
-        func: null,
-        selectList: []
+        serviceList: [],
+        selectService: {
+          specList: [],
+          subList: []
+        },
+        specData: {},
+        subData: {}
       }
     },
     mounted () {
-      this.editId && this.getDetail()
+      this.getList()
     },
     methods: {
-      getDetail () {
-        BannerGetByIdApi({ id: this.editId }).then(res => {
-          const defualtData = ['imageUrl', 'type', 'relationId', 'imageOrder']
-          if (res.data.code === '200') {
-            const { data } = res.data
-            Object.keys(defualtData).map(v => {
-              this.form.setFieldsValue({ [defualtData[v]]: data[defualtData[v]] })
+      getList () {
+        getSystemServiceApi().then(res => {
+          const { data, code } = res.data
+          if (data && code === '200') {
+            const serviceData = data[0]
+            this.serviceList = res.data.data
+            this.selectService = serviceData
+            this.specData = serviceData.specList[0]
+            this.subData = serviceData.subList[0]
+            this.form.setFieldsValue({
+              serviceName: this.serviceList[0].systemServiceId,
+              servicePerson: serviceData.specList[0].systemServiceSpecId,
+              serviceTime: serviceData.subList[0].monthCount
             })
-            this.shopList = [{
-              id: data.relationId,
-              name: data.relationName
-            }]
           }
         })
       },
-      // 获取号池
-      setSelect () {
-        const type = this.form.getFieldValue('type')
-        this.showDrawer = true
-        this.selectList = [this.form.getFieldValue('relationId') || '']
-        this.func = type === '0' ? ComboGetlistIdNameApi : ShopGetlistIdNameApi
-      },
-      setPool ({ item }) {
-        this.shopList = item
-        this.form.setFieldsValue({ relationId: item[0].id })
-        this.showDrawer = false
-        this.$forceUpdate()
+      saveForm () {
+        openTenantSystemServiceApi({
+          systemServiceDiscountId: this.selectService.systemServiceDiscountId,
+          systemServiceDiscountSubId: this.subData.systemServiceDiscountSubId,
+          systemServiceId: this.selectService.systemServiceId,
+          systemServiceSpecId: this.specData.systemServiceSpecId,
+          tenantId: this.editId
+        }).then(res => {
+          if (res.data.code === '200') {
+            this.$message.success(`开通成功`)
+            this.$emit('create')
+          }
+        })
       }
     },
+    computed: {
+      allPrice () {
+        return this.specData.price * (this.subData.discountRate / 100)
+      }
+    }
   }
 </script>
 

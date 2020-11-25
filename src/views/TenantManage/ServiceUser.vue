@@ -52,6 +52,7 @@
 
   import SearchC from '@/components/SearchC/SearchC'
   import { userDeleteApi, userListApi } from '@/api/userManageApi'
+  import { pageTenantUserApi } from '@/api/TenantManageApi'
 
   const column = [
     {
@@ -99,7 +100,7 @@
     methods: {
       // 获取列表
       getList () {
-        userListApi({
+        pageTenantUserApi({
           ...this.pages,
           ...this.searchName,
           tenantId: this.$route.query.id

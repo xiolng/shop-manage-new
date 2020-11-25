@@ -14,7 +14,7 @@
         />
       </a-col>
       <a-col>
-        <a-button type="primary" @click="visible = true, isEdit = false">添加</a-button>
+        <a-button type="primary" @click="visible = true, editId = ''">添加</a-button>
       </a-col>
     </a-row>
     <!--tableList-->
@@ -24,22 +24,27 @@
         :columns="columns"
         @change="pageChange"
         :pagination="pages"
-        rowKey="roleId"
+        rowKey="systemServiceDiscountId"
       >
+        <template slot="discountSubList" slot-scope="text">
+          <div v-for="item in text">
+            {{item.monthCount}}个月：{{item.discountRate}}%折扣
+          </div>
+        </template>
         <!--编辑-->
         <template slot="operation" slot-scope="text, record">
           <a-button
             type="primary"
             size="small"
             style="margin-right: 10px;"
-            @click="visible = true, isEdit = true, getDetail(record.roleId)"
+            @click="visible = true, editId = record.systemServiceDiscountId"
           >编辑
           </a-button>
           <!--删除-->
           <a-popconfirm
             v-if="dataSource.length"
             title="确定删除吗？"
-            @confirm="() => onDelete(record.roleId)"
+            @confirm="() => onDelete(record.systemServiceDiscountId)"
           >
             <a-button type="danger" size="small">删除</a-button>
           </a-popconfirm>
@@ -47,18 +52,25 @@
       </a-table>
     </div>
     <create-time-rule
+      v-if="visible"
       ref="createTimeRule"
       :visible="visible"
-      @cancel="visible = false, isEdit = false, $refs.createTimeRule.form.resetFields()"
+      :edit-id="editId"
+      @cancel="visible = false, editId = '', $refs.createTimeRule.form.resetFields()"
       @create="saveForm"
     />
   </div>
 </template>
 
 <script>
-  import { roleAddApi, roleDeleteApi, roleeDetailApi, roleEditApi, roleListApi } from '@/api/roleManageApi'
   import SearchC from '@/components/SearchC/SearchC'
   import CreateTimeRule from '@/views/SystemService/TimeRule/CreateTimeRule'
+  import {
+    deleteSystemServiceDiscountApi,
+    pageSystemServiceDiscountApi,
+    saveSystemServiceDiscountApi,
+    updateSystemServiceDiscountApi
+  } from '@/api/SystemServiceApi'
 
   export default {
     name: 'TimeRule',
@@ -79,15 +91,16 @@
         columns: [
           {
             title: '折扣名称',
-            dataIndex: 'roleName',
+            dataIndex: 'discountName',
           },
           {
             title: '折扣描述',
-            dataIndex: 'roleName',
+            dataIndex: 'serviceDiscountDetail',
           },
           {
             title: '折扣比率',
-            dataIndex: 'roleName',
+            dataIndex: 'discountSubList',
+            scopedSlots: { customRender: 'discountSubList' }
           },
           {
             title: '创建人',
@@ -113,7 +126,7 @@
           },
         ],
         visible: false,
-        isEdit: false,
+        editId: '',
       }
     },
     mounted () {
@@ -122,25 +135,13 @@
     methods: {
       // 获取列表
       getList () {
-        roleListApi({
+        pageSystemServiceDiscountApi({
           pageSize: this.pages.pageSize,
           pageNum: this.pages.current,
           ...this.searchName
         }).then(res => {
           this.dataSource = res.data.data
           this.pages.total = res.data.total
-        })
-      },
-      // 获取详情
-      getDetail (key) {
-        roleeDetailApi({
-          roleId: key
-        }).then(res => {
-          const data = res.data.data
-          // data.menuIdNameOutDTOS = data.menuIdNameOutDTOS.map(v => v.menuId)
-          this.isEdit = true
-          this.isShowModal = true
-          this.formData = data
         })
       },
       // 分页
@@ -154,8 +155,8 @@
       },
       // 删除
       onDelete (key) {
-        roleDeleteApi({
-          roleId: key
+        deleteSystemServiceDiscountApi({
+          systemServiceDiscountId: key
         }).then(res => {
           if (res.data.code === '200') {
             this.$message.info(`删除成功`)
@@ -165,23 +166,36 @@
       },
       // 保存
       saveForm () {
-        const api = this.isEdit ? roleEditApi : roleAddApi
+        const api = this.editId ? updateSystemServiceDiscountApi : saveSystemServiceDiscountApi
         this.$refs.createTimeRule.form.validateFields((err, values) => {
           if (!err) {
             this.$refs.createTimeRule.$refs.ruleArr.form.validateFields((errChild, valChild) => {
               if (!errChild) {
-                console.log(valChild)
+                console.log(3333, valChild)
+                const discountSubList = valChild.keys.map(v => {
+                  console.log(444, v)
+                  return {
+                    discountRate: valChild.discountRate[v],
+                    monthCount: valChild.monthCount[v],
+                  }
+                })
+                const isEdit = {}
+                if (this.editId) {
+                  isEdit.systemServiceDiscountId = this.editId
+                }
                 api({
                   ...values,
-                  roleId: this.formData.roleId || ''
+                  discountSubList,
+                  ...isEdit
                 }).then(res => {
                   if (res.data.code === '200') {
                     this.$message.info(`保存成功`)
                     this.getList()
-                    this.form.resetFields()
+                    this.$refs.createTimeRule.form.resetFields()
+                    this.$refs.createTimeRule.$refs.ruleArr.form.resetFields()
                     this.formData = {}
-                    this.isEdit = false
-                    this.isShowModal = false
+                    this.editId = ''
+                    this.visible = false
                   }
                 })
               }

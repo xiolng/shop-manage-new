@@ -30,12 +30,12 @@
       rowKey="tenantId"
       @change="pageChange"
     >
-      <div slot="serviceManage" slot-scope="text">
+      <div slot="serviceManage" slot-scope="text, record">
         <a-button
           type="primary"
           size="small"
           class="mr-10"
-          @click="isService = true"
+          @click="isService = true, editId = record.tenantId"
         >服务管理
         </a-button>
       </div>
@@ -99,15 +99,17 @@
       ref="createTenantManage"
       :visible="visible"
       :edit-id="editId"
-      @cancel="visible = false"
+      @cancel="visible = false, editId = ''"
       @create="saveForm"
     />
     <!--服务管理-->
     <service-manage
       v-if="isService"
       ref="serviceManage"
+      :edit-id="editId"
       :visible="isService"
-      @cancel="isService = false"
+      @cancel="isService = false, editId = ''"
+      @create="isService = false"
     />
   </div>
 </template>
@@ -118,7 +120,7 @@
   import {
     tenantAddApi,
     tenantDeleteApi,
-    tenantDisableApi,
+    tenantDisableApi, tenantEditApi,
     tenantEnableApi,
     tenantListApi
   } from '@/api/TenantManageApi'
@@ -212,12 +214,19 @@
           }
         })
       },
+      // 添加租户
       saveForm () {
+        const func = this.editId ? tenantEditApi : tenantAddApi
+        const editData = {}
+        if (this.editId) {
+          editData.tenantId = this.editId
+        }
         this.$refs.createTenantManage.form.validateFields((err, val) => {
           if (!err) {
             console.log(val)
-            tenantAddApi({
+            func({
               ...val,
+              ...editData,
               tenantStatus: +val.tenantStatus
             }).then(res => {
               if (res.data.code === '200') {
@@ -230,6 +239,7 @@
           }
         })
       },
+      // 设置状态
       setTenantStatus (item) {
         this.tenantStatusLoading = true
         const func = item.tenantStatus ? tenantDisableApi : tenantEnableApi

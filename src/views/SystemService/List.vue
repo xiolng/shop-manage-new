@@ -51,7 +51,7 @@
               月数：{{item.monthCount}}
             </a-col>
             <a-col>
-              折扣比率：{{item.discountRate}}
+              折扣比率：{{item.discountRate}}%
             </a-col>
           </a-row>
         </div>
@@ -139,8 +139,8 @@
       return {
         column,
         pages: {
-          current: 2,
-          pageSize: 1,
+          current: 1,
+          pageSize: 10,
           total: 0, // 总条数
           showSizeChanger: true
         }, // 分页
@@ -185,7 +185,7 @@
         SystemServiceDeleteApi({
           id
         }).then(res => {
-          const { code } = res
+          const { code } = res.data
           if (code === '200') {
             this.$message.success('删除成功')
             this.getList()

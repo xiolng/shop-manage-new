@@ -17,9 +17,24 @@
         />
       </a-form-item>
       <a-form-item label="服务折扣">
-        <a-card>
-          <service-discounts ref="serviceDiscount" :limit-list="subList" />
-        </a-card>
+        <a-select
+          v-decorator="[
+            `systemServiceDiscountId`,
+            {
+              initialValue: undefined,
+              rules: [{required: true, message: '请选择折扣'}]
+            }
+          ]"
+          placeholder="请选择折扣"
+        >
+          <a-select-option
+            v-for="item in serviceList"
+            :value="item.systemServiceDiscountId"
+            :key="item.systemServiceDiscountId"
+          >
+            {{item.discountName}}
+          </a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item label="服务人数">
         <a-card>
@@ -47,7 +62,7 @@
           :showCheckedStrategy="showParent"
           placeholder="请选择商品类别"
           v-decorator="[
-            `shopType`,
+            `menuIds`,
             // {rules: [{required: true, message: '请选择商品类别'}]}
           ]"
         />
@@ -69,15 +84,18 @@
 <script>
   import { TreeSelect } from 'ant-design-vue'
   import ServiceArr from '@/views/SystemService/ServiceArr'
-  import { SystemServiceAddApi, SystemServiceeDetailApi } from '@/api/SystemServiceApi'
-  import { menuAllListlApi } from '@/api/MenuManageApi'
+  import {
+    listSystemServiceDiscountApi,
+    SystemServiceAddApi,
+    SystemServiceeDetailApi,
+    SystemServiceEditApi
+  } from '@/api/SystemServiceApi'
   import { treeMenu } from '@/utils/menu'
-  import ServiceDiscounts from '@/views/SystemService/ServiceDiscounts'
+  import { CrmMenuAllListlApi } from '@/api/CrmMenuApi'
 
   export default {
     name: 'EditService',
     components: {
-      ServiceDiscounts,
       ServiceArr
     },
     data () {
@@ -85,38 +103,49 @@
         form: this.$form.createForm(this, {}),
         loading: false,
         specList: [],
-        subList: [],
         showParent: TreeSelect.SHOW_ALL,
-        menuData: []
+        menuData: [],
+        serviceList: []
       }
     },
     mounted () {
+      this.getServiceAll()
       this.$route.query.id && this.getDetail()
       this.getMenuData()
     },
     methods: {
+      getServiceAll () {
+        listSystemServiceDiscountApi().then(res => {
+          const { data, code } = res.data
+          if (code === '200') {
+            this.serviceList = data
+          }
+        })
+      },
       getDetail () {
         SystemServiceeDetailApi({
           id: this.$route.query.id
         }).then(res => {
           if (res.data.code === '200') {
             const { data } = res.data
-            this.specList = data.specList
-            this.subList = data.subList || []
+            this.specList = data.specList || []
             this.form.setFieldsValue({
               serviceName: data.serviceName,
-              serviceDetail: data.serviceDetail
+              serviceDetail: data.serviceDetail,
+              systemServiceDiscountId: data.systemServiceDiscountId
             })
           }
         })
       },
       // 获取菜单列表
       getMenuData () {
-        menuAllListlApi({}).then(res => {
-          this.menuData = treeMenu(res.data.data, 'menuId')
+        CrmMenuAllListlApi({}).then(res => {
+          this.menuData = treeMenu(res.data.data, 'systemMenuId')
         })
       },
       saveForm () {
+        const id = this.$route.query.id
+        const func = id ? SystemServiceEditApi : SystemServiceAddApi
         this.loading = true
         this.form.validateFieldsAndScroll({
           first: true,
@@ -129,40 +158,23 @@
             this.$refs.serviceArr.form.validateFields((err, val) => {
               console.log(err, val)
               if (!err) {
-                console.log(4444)
                 const specList = val.keys.map(v => {
                   console.log(v)
                   return {
-                    peopleNum: val.peopleNum[v],
-                    servicePrice: val.servicePrice[v],
+                    personCount: val.personCount[v],
+                    price: val.price[v],
                   }
                 })
-                console.log(5555, specList)
-                this.$refs.serviceDiscount.form.validateFields((errDis, valDis) => {
-                  console.log(errDis, valDis)
-                  if (!errDis) {
-                    const subList = valDis.keys.map(d => {
-                      console.log(d)
-                      return {
-                        monthCount: valDis.monthCount[d],
-                        discountRate: valDis.discountRate[d]
-                      }
+                func({
+                  specList,
+                  ...valForm
+                }).then(res => {
+                  this.loading = false
+                  if (res.data.code === '200') {
+                    this.$message.success(`添加成功`)
+                    this.$router.push({
+                      path: `/systemService/systemServiceList`
                     })
-                    SystemServiceAddApi({
-                      subList,
-                      specList,
-                      ...valForm
-                    }).then(res => {
-                      this.loading = false
-                      if (res.data.code === '200') {
-                        this.$message.success(`添加成功`)
-                        this.$router.push({
-                          path: `/systemService/systemServiceList`
-                        })
-                      }
-                    })
-                  } else {
-                    this.loading = false
                   }
                 })
               } else {
