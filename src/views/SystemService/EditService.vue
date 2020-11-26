@@ -41,18 +41,18 @@
           <service-arr ref="serviceArr" :limit-list="specList" />
         </a-card>
       </a-form-item>
-      <a-form-item label="服务描述">
-        <a-textarea
-          placeholder="请输入服务描述"
-          :auto-size="{minRows: 3, maxRows: 5}"
-          v-decorator="[
-              `serviceDetail`,
-              {
-                rules: [{required: true, message: '请输入服务描述'}]
-              }
-            ]"
-        />
-      </a-form-item>
+      <!--<a-form-item label="服务描述">-->
+      <!--  <a-textarea-->
+      <!--    placeholder="请输入服务描述"-->
+      <!--    :auto-size="{minRows: 3, maxRows: 5}"-->
+      <!--    v-decorator="[-->
+      <!--        `serviceDetail`,-->
+      <!--        {-->
+      <!--          rules: [{required: true, message: '请输入服务描述'}]-->
+      <!--        }-->
+      <!--      ]"-->
+      <!--  />-->
+      <!--</a-form-item>-->
 
       <a-form-item label="权限">
 
@@ -131,7 +131,7 @@
             this.specList = data.specList || []
             this.form.setFieldsValue({
               serviceName: data.serviceName,
-              serviceDetail: data.serviceDetail,
+              // serviceDetail: data.serviceDetail,
               systemServiceDiscountId: data.systemServiceDiscountId
             })
           }

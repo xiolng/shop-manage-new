@@ -93,10 +93,10 @@
       title: '服务名称',
       dataIndex: 'serviceName'
     },
-    {
-      title: '服务描述',
-      dataIndex: 'serviceDetail'
-    },
+    // {
+    //   title: '服务描述',
+    //   dataIndex: 'serviceDetail'
+    // },
     {
       title: '服务规格',
       dataIndex: 'specList',
