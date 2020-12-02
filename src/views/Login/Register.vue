@@ -58,7 +58,8 @@
       }
     },
     methods: {
-      saveRegister () {
+      saveRegister (e) {
+        e.preventDefault()
         this.form.validateFields((err, value) => {
           if (!err) {
             setRegister(value).then(res => {

@@ -68,10 +68,10 @@ module.exports = {
       //   pathRewrite: { '^/system': '/system' },
       //   secure: false
       // },
-      // '/admin': {
-      //   target: 'http://192.168.1.171:8888/',
-      //   pathRewrite: { '^/admin': '/admin' },
-      //   secure: false
+      // '/*': {
+      //   target: 'http://192.168.1.146:7777/',
+      //   // pathRewrite: { '^/admin': '/admin' },
+      //   // secure: false
       // },
       '/*': {
         target: 'http://49.232.173.25:7777/'

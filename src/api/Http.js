@@ -22,7 +22,9 @@ Http.interceptors.request.use(
     // 过滤不使用token的接口
     const isLogin = [
       '/login',
-      '/signin'
+      '/signin',
+      '/#/login',
+      '/#/signin'
     ].some(v => config.url.includes(v))
     // 获取本地缓存token
     const token = localStorage.getItem('accessToken')
@@ -30,7 +32,7 @@ Http.interceptors.request.use(
     if (!isLogin) {
       if (!token) {
         localStorage.clear()
-        location.href = '/signin'
+        location.href = '/#/signin'
       }
       // 设置 头部token
       config.headers.Authorization = token
@@ -50,6 +52,9 @@ Http.interceptors.response.use(
     // 没有code码接口
     if ([
       '/login',
+      '/signin',
+      '/#/login',
+      '/#/signin',
       '/QuestionStatistics',
     ].some(v => config.config.url.includes(v))) {
       return config

@@ -10,7 +10,7 @@
         <search-c
           @get-list="getSearch"
           :search-list="[
-            {name: '用户名', key: 'username'}
+            {name: '服务名称', key: 'serviceName'}
             ]"
         />
       </a-col>

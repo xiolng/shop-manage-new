@@ -32,9 +32,9 @@ export const userDeleteApi = params => Http.get(
   { params }
 )
 // 重置密码
-export const resetPasswordApi = params => Http.get(
+export const resetPasswordApi = data => Http.post(
   `${BASE_URL}/user/resetPassword`,
-  { params }
+  data
 )
 
 // 导入用户

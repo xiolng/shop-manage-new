@@ -9,7 +9,7 @@
         <search-c
           @get-list="clickSearch"
           :search-list="[
-            {name: '规则名称', key: 'ruleName'}
+            {name: ' 折扣名称', key: 'discountName'}
             ]"
         />
       </a-col>
@@ -82,7 +82,9 @@
           total: 0, // 总条数
           showSizeChanger: true
         }, // 分页
-        searchName: {}, // 搜索关键字
+        searchName: {
+          discountName: ''
+        }, // 搜索关键字
         formData: {
           roleName: '',
           menuIds: []
@@ -156,7 +158,7 @@
       // 删除
       onDelete (key) {
         deleteSystemServiceDiscountApi({
-          systemServiceDiscountId: key
+          id: key
         }).then(res => {
           if (res.data.code === '200') {
             this.$message.info(`删除成功`)

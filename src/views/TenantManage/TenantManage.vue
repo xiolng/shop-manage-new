@@ -99,7 +99,7 @@
       ref="createTenantManage"
       :visible="visible"
       :edit-id="editId"
-      @cancel="visible = false, editId = ''"
+      @cancel="visible = false, editId = '', $refs.createTenantManage.form.resetFields()"
       @create="saveForm"
     />
     <!--服务管理-->

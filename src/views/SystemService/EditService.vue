@@ -63,7 +63,9 @@
           placeholder="请选择商品类别"
           v-decorator="[
             `menuIds`,
-            // {rules: [{required: true, message: '请选择商品类别'}]}
+            {
+              rules: [{required: true, message: '请选择商品类别'}]
+            }
           ]"
         />
       </a-form-item>
@@ -110,8 +112,8 @@
     },
     mounted () {
       this.getServiceAll()
-      this.$route.query.id && this.getDetail()
       this.getMenuData()
+      this.$route.query.id && this.getDetail()
     },
     methods: {
       getServiceAll () {
@@ -131,6 +133,7 @@
             this.specList = data.specList || []
             this.form.setFieldsValue({
               serviceName: data.serviceName,
+              menuIds: data.menuIds,
               // serviceDetail: data.serviceDetail,
               systemServiceDiscountId: data.systemServiceDiscountId
             })
@@ -146,6 +149,10 @@
       saveForm () {
         const id = this.$route.query.id
         const func = id ? SystemServiceEditApi : SystemServiceAddApi
+        const idData = {}
+        if (id) {
+          idData.systemServiceId = id
+        }
         this.loading = true
         this.form.validateFieldsAndScroll({
           first: true,
@@ -167,7 +174,8 @@
                 })
                 func({
                   specList,
-                  ...valForm
+                  ...valForm,
+                  ...idData
                 }).then(res => {
                   this.loading = false
                   if (res.data.code === '200') {

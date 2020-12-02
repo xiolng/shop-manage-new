@@ -10,7 +10,7 @@
         <search-c
           @get-list="getSearch"
           :search-list="[
-            {name: '服务名称', key: 'username'}
+            {name: '服务名称', key: 'serviceName'}
             ]"
         />
       </a-col>
@@ -82,7 +82,9 @@
           total: 0, // 总条数
           showSizeChanger: true
         }, // 分页
-        searchName: {}, // 搜索关键字
+        searchName: {
+          serviceName: ''
+        }, // 搜索关键字
         dataSource: [],
       }
     },
@@ -93,7 +95,8 @@
       // 获取列表
       getList () {
         pageTenantSystemServiceApi({
-          ...this.pages,
+          pageSize: this.pages.pageSize,
+          pageNum: this.pages.current,
           ...this.searchName,
           tenantId: this.$route.query.id
         }).then(res => {

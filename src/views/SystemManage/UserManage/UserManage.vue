@@ -186,6 +186,7 @@
               userId: this.activeId
             }).then(res => {
               if (res.data.code === '200') {
+                this.isChangePassword = false
                 this.$message.success(`修改成功`)
               }
             })

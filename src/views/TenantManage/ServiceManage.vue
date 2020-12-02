@@ -67,7 +67,7 @@
 
         <a-form-item label="价格">
           <div style="color: #dd4a68">
-            ￥{{allPrice}} 元
+            ￥{{allPrice.toFixed(2)}} 元
           </div>
         </a-form-item>
       </a-form>
