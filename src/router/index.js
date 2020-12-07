@@ -89,7 +89,7 @@ const routes = [
         name: 'SystemService',
         component: () => import('@/views/SystemService'),
         meta: {
-          name: '',
+          name: '服务管理',
           activeUrl: '/systemService'
         },
         children: [
@@ -98,7 +98,7 @@ const routes = [
             name: 'systemServiceList',
             component: () => import('@/views/SystemService/List'),
             meta: {
-              name: '系统服务列表',
+              name: '服务列表',
               icon: 'menu',
               activeUrl: '/systemService/systemServiceList'
             }
@@ -108,7 +108,7 @@ const routes = [
             name: 'systemServiceEdit',
             component: () => import('@/views/SystemService/EditService'),
             meta: {
-              name: '系统服务编辑',
+              name: '服务编辑',
               icon: 'menu',
               activeUrl: '/systemService/systemServiceList'
             },
@@ -118,7 +118,7 @@ const routes = [
             name: 'timeRule',
             component: () => import('@/views/SystemService/TimeRule/TimeRule'),
             meta: {
-              name: '时间规则',
+              name: '折扣管理',
               icon: 'menu',
               activeUrl: '/systemService/timeRule'
             }

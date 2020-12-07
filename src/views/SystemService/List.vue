@@ -197,7 +197,7 @@
        * @param value
        */
       getSearch (value) {
-        this.searchName = value
+        this.searchName = value || { serviceName: '' }
         this.getList()
       },
       /**

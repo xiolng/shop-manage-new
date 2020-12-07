@@ -111,7 +111,7 @@
       }
     },
     mounted () {
-      this.getServiceAll()
+      !this.$route.query.id && this.getServiceAll()
       this.getMenuData()
       this.$route.query.id && this.getDetail()
     },
@@ -130,6 +130,7 @@
         }).then(res => {
           if (res.data.code === '200') {
             const { data } = res.data
+            this.serviceList = data.discountList
             this.specList = data.specList || []
             this.form.setFieldsValue({
               serviceName: data.serviceName,
