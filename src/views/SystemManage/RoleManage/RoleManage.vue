@@ -99,9 +99,9 @@
 
 <script>
   import SearchC from '@/components/SearchC/SearchC'
-  import { roleAddApi, roleDeleteApi, roleeDetailApi, roleEditApi, roleListApi } from '@/api/roleManageApi'
+  import { roleAddApi, roleDeleteApi, roleeDetailApi, roleEditApi, roleListApi } from '@/api/systemManage/roleManageApi'
   import { treeMenu } from '@/utils/menu'
-  import { menuAllListlApi } from '@/api/MenuManageApi'
+  import { menuAllListlApi } from '@/api/systemManage/MenuManageApi'
   import { TreeSelect } from 'ant-design-vue'
 
   export default {

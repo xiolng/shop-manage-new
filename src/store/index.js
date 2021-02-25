@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { menuLoginApi } from '@/api/MenuManageApi'
+import { menuLoginApi } from '@/api/systemManage/MenuManageApi'
 import { treeMenu } from '@/utils/menu'
 
 Vue.use(Vuex)

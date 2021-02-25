@@ -19,7 +19,7 @@ export const tenantAllListlApi = params => Http.get(
 )
 // 详情
 export const tenanteDetailApi = params => Http.get(
-  `${BASE_URL}/tenant/getTenant`,
+  `${BASE_URL}/tenant/getTenantById`,
   { params }
 )
 // 新建
@@ -34,7 +34,7 @@ export const tenantEditApi = data => Http.post(
 )
 // 删除
 export const tenantDeleteApi = params => Http.get(
-  `${BASE_URL}/tenant/deleteTenant`,
+  `${BASE_URL}/tenant/deleteTentant`,
   { params }
 )
 
@@ -50,24 +50,31 @@ export const tenantDisableApi = params => Http.get(
   { params }
 )
 
-// 分页查询租户用户信息
-export const pageTenantUserApi = data => Http.post(
-  `${BASE_URL}/tenantUser/pageTenantUser`,
+// 充值记录
+export const rechargeLogApi = params => Http.get(
+  `${BASE_URL}/tenant/getRechargeRecordById`,
+  { params }
+)
+
+// 充值
+export const rechargeApi = data => Http.post(
+  `${BASE_URL}/tenant/rechargeTenant`,
   data
 )
+
 // 分页查询租户服务列表
 export const pageTenantSystemServiceApi = data => Http.post(
   `${BASE_URL}/tenantSystemService/pageTenantSystemService`,
   data
 )
 // 开通服务
-export const openTenantSystemServiceApi = data => Http.post(
-  `${BASE_URL}/tenantSystemService/openTenantSystemService`,
+export const savePaySettingApi = data => Http.post(
+  `${BASE_URL}/tenant/savePaySettings`,
   data
 )
-// 查询服务列表
-export const getSystemServiceApi = params => Http.get(
-  `${BASE_URL}/tenantSystemService/getSystemService`,
+// 查询支付配置
+export const paySettingApi = params => Http.get(
+  `${BASE_URL}/tenant/getPaySettingsById`,
   { params }
 )
 

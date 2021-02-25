@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import { menueDetailApi, menuEditApi } from '@/api/MenuManageApi'
+  import { menueDetailApi, menuEditApi } from '@/api/systemManage/MenuManageApi'
 
   export default {
     props: {

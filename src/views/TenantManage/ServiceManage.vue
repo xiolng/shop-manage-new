@@ -6,69 +6,39 @@
   <div class="ServiceManage">
     <a-modal
       :visible="visible"
-      title="开通服务"
+      title="支付配置"
       @cancel="$emit('cancel')"
       @ok="saveForm"
     >
-      <a-form :form="form" :label-col="{span: 4}" :wrapper-col="{span: 16}">
-        <a-form-item label="服务">
-          <a-radio-group
+      <a-form :form="form" :label-col="{span: 6}" :wrapper-col="{span: 16}">
+        <a-form-item label="微信小程序appid">
+          <a-input
             v-decorator="[
-              'serviceName',
-              {initialValue: 'b'}
+              'appId',
+              {initialValue: undefined}
               ]"
-          >
-            <a-radio-button
-              v-for="item in serviceList"
-              :key="item.systemServiceId"
-              :value="item.systemServiceId"
-              @click="selectService = item"
-            >
-              {{item.serviceName}}
-            </a-radio-button>
-          </a-radio-group>
+            placeholder="请输入微信小程序appid"
+          />
         </a-form-item>
 
-        <a-form-item label="人数">
-          <a-radio-group
+        <a-form-item label="微信支付商户号">
+          <a-input
             v-decorator="[
-              'servicePerson',
-              {initialValue: '5'}
+              'mchId',
+              {initialValue: undefined}
               ]"
-          >
-            <a-radio
-              v-for="item in selectService.specList"
-              :key="item.systemServiceSpecId"
-              :value="item.systemServiceSpecId"
-              @click="specData = item"
-            >
-              {{item.personCount}}人
-            </a-radio>
-          </a-radio-group>
+            placeholder="请输入微信支付商户号"
+          />
         </a-form-item>
 
-        <a-form-item label="时长">
-          <a-radio-group
+        <a-form-item label="微信支付商户密钥">
+          <a-input
             v-decorator="[
-              'serviceTime',
-              {initialValue: '6'}
+              'mchKey',
+              {initialValue: undefined}
               ]"
-          >
-            <a-radio
-              v-for="item in selectService.subList"
-              :key="item.monthCount"
-              :value="item.monthCount"
-              @click="subData = item"
-            >
-              {{item.monthCount}}月
-            </a-radio>
-          </a-radio-group>
-        </a-form-item>
-
-        <a-form-item label="价格">
-          <div style="color: #dd4a68">
-            ￥{{allPrice.toFixed(2)}} 元
-          </div>
+            placeholder="请输入微信支付商户密钥"
+          />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -76,7 +46,7 @@
 </template>
 
 <script>
-  import { getSystemServiceApi, openTenantSystemServiceApi } from '@/api/TenantManageApi'
+  import { paySettingApi, savePaySettingApi } from '@/api/TenantManageApi'
 
   export default {
     name: 'ServiceManage',
@@ -101,35 +71,32 @@
     },
     methods: {
       getList () {
-        getSystemServiceApi().then(res => {
+        paySettingApi({
+          tenantId: this.editId
+        }).then(res => {
           const { data, code } = res.data
           if (data && code === '200') {
-            const serviceData = data[0]
-            this.serviceList = res.data.data
-            this.selectService = serviceData
-            this.specData = serviceData.specList[0]
-            this.subData = serviceData.subList[0]
             this.form.setFieldsValue({
-              serviceName: this.serviceList[0].systemServiceId,
-              servicePerson: serviceData.specList[0].systemServiceSpecId,
-              serviceTime: serviceData.subList[0].monthCount
+              ...data
             })
           }
         })
       },
       saveForm () {
-        openTenantSystemServiceApi({
-          systemServiceDiscountId: this.selectService.systemServiceDiscountId,
-          systemServiceDiscountSubId: this.subData.systemServiceDiscountSubId,
-          systemServiceId: this.selectService.systemServiceId,
-          systemServiceSpecId: this.specData.systemServiceSpecId,
-          tenantId: this.editId
-        }).then(res => {
-          if (res.data.code === '200') {
-            this.$message.success(`开通成功`)
-            this.$emit('create')
+        this.form.validateFields((err, val) => {
+          if (!err) {
+            savePaySettingApi({
+              ...val,
+              tenantId: this.editId
+            }).then(res => {
+              if (res.data.code === '200') {
+                this.$message.success(`支付配置成功`)
+                this.$emit('create')
+              }
+            })
           }
         })
+
       }
     },
     computed: {

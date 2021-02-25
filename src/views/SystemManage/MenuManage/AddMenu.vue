@@ -28,7 +28,7 @@
 
 <script>
 
-  import { menuAddApi } from '@/api/MenuManageApi'
+  import { menuAddApi } from '@/api/systemManage/MenuManageApi'
 
   export default {
     props: {

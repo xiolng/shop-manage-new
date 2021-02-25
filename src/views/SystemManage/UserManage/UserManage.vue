@@ -79,7 +79,7 @@
 
 <script>
   import CreateUser from '@/views/SystemManage/UserManage/CreateUser'
-  import { resetPasswordApi, userAddApi, userDeleteApi, userEditApi, userListApi } from '@/api/userManageApi'
+  import { resetPasswordApi, userAddApi, userDeleteApi, userEditApi, userListApi } from '@/api/systemManage/userManageApi'
   import ChangePassword from '@/views/SystemManage/UserManage/ChangePassword'
 
   const column = [

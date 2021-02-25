@@ -10,7 +10,9 @@
         <search-c
           @get-list="getSearch"
           :search-list="[
-            {name: '租户名', key: 'username'}
+            {name: '租户名称', key: 'tenantName'},
+            {name: '联系人', key: 'realName'},
+            {name: '联系电话', key: 'phone'},
             ]"
         />
       </a-col>
@@ -36,29 +38,21 @@
           size="small"
           class="mr-10"
           @click="isService = true, editId = record.tenantId"
-        >服务管理
+        >支付配置
         </a-button>
       </div>
-      <div slot="serviceGet" slot-scope="text, record">
+      <div slot="/rechargeLog" slot-scope="text, record">
         <a-button
           type="primary"
           size="small"
           class="mr-10"
           @click="$router.push({
-          path: `/tenantManage/serviceGet?id=${record.tenantId}`
+          path: `/tenantManage/rechargeLog`,
+          query: {
+            tenantId: record.tenantId
+          }
           })"
-        >查询服务
-        </a-button>
-      </div>
-      <div slot="serviceUser" slot-scope="text">
-        <a-button
-          type="primary"
-          size="small"
-          class="mr-10"
-          @click="$router.push({
-          path: `/tenantManage/serviceUser`
-          })"
-        >查询用户
+        >充值
         </a-button>
       </div>
       <div slot="tenantStatus" slot-scope="text, record">
@@ -93,7 +87,7 @@
         </a-row>
       </div>
     </a-table>
-    <!--// 新建、编辑-->
+    <!--// 支付配置-->
     <create-tenant-manage
       v-if="visible"
       ref="createTenantManage"
@@ -142,7 +136,7 @@
       scopedSlots: { customRender: 'tenantStatus' }
     },
     {
-      title: '服务管理',
+      title: '支付配置',
       dataIndex: 'serviceManage',
       scopedSlots: { customRender: 'serviceManage' }
     },
@@ -155,14 +149,9 @@
       dataIndex: 'createTime'
     },
     {
-      title: '服务',
-      dataIndex: 'serviceGet',
-      scopedSlots: { customRender: 'serviceGet' }
-    },
-    {
-      title: '用户',
-      dataIndex: 'serviceUser',
-      scopedSlots: { customRender: 'serviceUser' }
+      title: '充值',
+      dataIndex: '/rechargeLog',
+      scopedSlots: { customRender: '/rechargeLog' }
     },
     {
       title: '操作',
@@ -227,7 +216,7 @@
             func({
               ...val,
               ...editData,
-              tenantStatus: +val.tenantStatus
+              // tenantStatus: +val.tenantStatus
             }).then(res => {
               if (res.data.code === '200') {
                 this.$message.success(`保存成功`)

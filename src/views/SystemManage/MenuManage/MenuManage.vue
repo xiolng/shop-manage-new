@@ -40,7 +40,7 @@
     rootFun, // 根级目录渲染
     renderContent // 树结构菜单按钮渲染
   } from '@/utils/menu'
-  import { menuAllListlApi, menuDeleteApi } from '@/api/MenuManageApi'
+  import { menuAllListlApi, menuDeleteApi } from '@/api/systemManage/MenuManageApi'
 
   export default {
     name: 'MenuManage',

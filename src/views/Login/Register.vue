@@ -63,7 +63,7 @@
         this.form.validateFields((err, value) => {
           if (!err) {
             setRegister(value).then(res => {
-              if (res.data.success) {
+              if (res.data.code === '200') {
                 this.$message.success(`注册成功`)
                 this.$parent.$data.isRegister = false
               } else {

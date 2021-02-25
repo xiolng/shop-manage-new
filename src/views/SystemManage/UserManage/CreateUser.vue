@@ -100,9 +100,9 @@
 </template>
 
 <script>
-  import { usereDetailApi } from '@/api/userManageApi'
+  import { usereDetailApi } from '@/api/systemManage/userManageApi'
   // import UploadImgC from '@/components/UploadImgC/UploadImgC'
-  import { roleAllListlApi } from '@/api/roleManageApi'
+  import { roleAllListlApi } from '@/api/systemManage/roleManageApi'
   import { validPhone } from '@/utils'
 
   export default {

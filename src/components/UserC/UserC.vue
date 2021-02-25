@@ -62,12 +62,14 @@
       },
       // 退出登录
       outLogin () {
-        setOutLogin().then(res => {
-          if (res.data.code === '200') {
-            localStorage.clear()
-            this.$router.push('/signin')
-          }
-        })
+        localStorage.clear()
+        this.$router.push('/signin')
+        // setOutLogin().then(res => {
+        //   if (res.data.code === '200') {
+        //     localStorage.clear()
+        //     this.$router.push('/signin')
+        //   }
+        // })
       }
     }
   }

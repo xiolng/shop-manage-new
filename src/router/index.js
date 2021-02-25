@@ -85,57 +85,6 @@ const routes = [
         ]
       },
       {
-        path: '/systemService',
-        name: 'SystemService',
-        component: () => import('@/views/SystemService'),
-        meta: {
-          name: '服务管理',
-          activeUrl: '/systemService'
-        },
-        children: [
-          {
-            path: 'systemServiceList',
-            name: 'systemServiceList',
-            component: () => import('@/views/SystemService/List'),
-            meta: {
-              name: '服务列表',
-              icon: 'menu',
-              activeUrl: '/systemService/systemServiceList'
-            }
-          },
-          {
-            path: 'systemServiceEdit',
-            name: 'systemServiceEdit',
-            component: () => import('@/views/SystemService/EditService'),
-            meta: {
-              name: '服务编辑',
-              icon: 'menu',
-              activeUrl: '/systemService/systemServiceList'
-            },
-          },
-          {
-            path: 'timeRule',
-            name: 'timeRule',
-            component: () => import('@/views/SystemService/TimeRule/TimeRule'),
-            meta: {
-              name: '折扣管理',
-              icon: 'menu',
-              activeUrl: '/systemService/timeRule'
-            }
-          },
-        ]
-      },
-      {
-        path: `/crmMenu`,
-        name: 'crmMenu',
-        component: () => import('@/views/CrmMenu/MenuCrmManage'),
-        meta: {
-          name: 'CRM菜单',
-          icon: 'menu',
-          activeUrl: '/crmMenu'
-        }
-      },
-      {
         path: `/tenantManage`,
         name: 'tenantManage',
         component: () => import('@/views/TenantManage'),
@@ -155,20 +104,11 @@ const routes = [
             }
           },
           {
-            path: 'serviceGet',
-            name: 'serviceGet',
-            component: () => import('@/views/TenantManage/ServiceGet'),
+            path: 'rechargeLog',
+            name: 'rechargeLog',
+            component: () => import('@/views/TenantManage/RechargeLog'),
             meta: {
-              name: '查询服务',
-              activeUrl: '/tenantManage/list'
-            }
-          },
-          {
-            path: 'serviceUser',
-            name: 'serviceUser',
-            component: () => import('@/views/TenantManage/ServiceUser'),
-            meta: {
-              name: '查询用户',
+              name: '充值列表',
               activeUrl: '/tenantManage/list'
             }
           },
