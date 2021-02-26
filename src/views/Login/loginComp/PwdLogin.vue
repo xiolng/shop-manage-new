@@ -11,7 +11,7 @@
                   {rules: [{required: true, message: '请输入手机号或用户名', trigger: 'change'}]}
                 ]"
           >
-            <icon-font slot="prefix" type="iconphone" style="color: #888; font-size: 14px;"/>
+            <icon-font slot="prefix" type="iconphone" style="color: #888; font-size: 14px;" />
           </a-input>
         </a-form-item>
         <a-form-item>
@@ -23,7 +23,7 @@
             ]"
             @keyup.enter="handleSubmit"
           >
-            <icon-font slot="prefix" type="iconpassword" style="color: #888; font-size: 14px;"/>
+            <icon-font slot="prefix" type="iconpassword" style="color: #888; font-size: 14px;" />
           </a-input-password>
         </a-form-item>
         <a-button
@@ -61,6 +61,11 @@
               if (res.data && res.data.accessToken) {
                 localStorage.setItem('accessToken', `${res.data.tokenType} ${res.data.accessToken}`)
                 this.form.resetFields()
+                const link = localStorage.getItem('link')
+                if (link && !link.includes('signin')) {
+                  this.$router.push(link.split('#')[1])
+                  return false
+                }
                 this.$router.push('/')
               } else {
                 this.$message.error('用户名或密码错误')

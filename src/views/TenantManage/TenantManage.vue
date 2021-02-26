@@ -42,18 +42,33 @@
         </a-button>
       </div>
       <div slot="/rechargeLog" slot-scope="text, record">
-        <a-button
-          type="primary"
-          size="small"
-          class="mr-10"
-          @click="$router.push({
+        <a-row
+          type="flex"
+          justify="space-between"
+        >
+          <a-col>
+            <a-button
+              type="primary"
+              size="small"
+              class="mr-10"
+              @click="visibleRecharge = true, editId = record.tenantId"
+            >充值
+            </a-button>
+          </a-col>
+          <a-col>
+            <a-button
+              size="small"
+              class="mr-10"
+              @click="$router.push({
           path: `/tenantManage/rechargeLog`,
           query: {
             tenantId: record.tenantId
           }
           })"
-        >充值
-        </a-button>
+            >充值记录
+            </a-button>
+          </a-col>
+        </a-row>
       </div>
       <div slot="tenantStatus" slot-scope="text, record">
         <a-switch
@@ -105,6 +120,14 @@
       @cancel="isService = false, editId = ''"
       @create="isService = false"
     />
+    <recharge-comp
+      v-if="visibleRecharge"
+      ref="rechargeRef"
+      :edit-id="editId"
+      :visible="visibleRecharge"
+      @cancel="visibleRecharge = false, editId = ''"
+      @create="visibleRecharge = false"
+    />
   </div>
 </template>
 
@@ -120,15 +143,13 @@
   } from '@/api/TenantManageApi'
   import CreateTenantManage from '@/views/TenantManage/CreateTenantManage'
   import ServiceManage from '@/views/TenantManage/ServiceManage'
+  import RechargeComp from '@/views/TenantManage/RechargeComp'
 
   const column = [
     {
       title: '租户名称',
-      dataIndex: 'tenantName'
-    },
-    {
-      title: '租户描述',
-      dataIndex: 'mainUser'
+      dataIndex: 'tenantName',
+      width: '10%'
     },
     {
       title: '是否启用',
@@ -142,7 +163,9 @@
     },
     {
       title: '创建人',
-      dataIndex: 'createBy'
+      dataIndex: 'createBy',
+      ellipsis: true,
+      width: '10%'
     },
     {
       title: '创建时间',
@@ -151,7 +174,14 @@
     {
       title: '充值',
       dataIndex: '/rechargeLog',
-      scopedSlots: { customRender: '/rechargeLog' }
+      scopedSlots: { customRender: '/rechargeLog' },
+      width: 160
+    },
+    {
+      title: '租户描述',
+      dataIndex: 'mainUser',
+      width: '10%',
+      ellipsis: true
     },
     {
       title: '操作',
@@ -163,6 +193,7 @@
   export default {
     name: 'TenantManage',
     components: {
+      RechargeComp,
       ServiceManage,
       CreateTenantManage,
       SearchC
@@ -183,7 +214,9 @@
         isService: false,
         editId: '',
         // 启用、禁用修改loading
-        tenantStatusLoading: false
+        tenantStatusLoading: false,
+        // 充值
+        visibleRecharge: false
       }
     },
     mounted () {
@@ -233,7 +266,7 @@
         this.tenantStatusLoading = true
         const func = item.tenantStatus ? tenantDisableApi : tenantEnableApi
         func({
-          id: item.tenantId,
+          tenantId: item.tenantId,
         }).then(res => {
           this.tenantStatusLoading = false
           if (res.data.code === '200') {

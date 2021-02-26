@@ -51,8 +51,14 @@ export const tenantDisableApi = params => Http.get(
 )
 
 // 充值记录
-export const rechargeLogApi = params => Http.get(
+export const rechargeLogApi = data => Http.post(
   `${BASE_URL}/tenant/getRechargeRecordById`,
+  data
+)
+
+// 充值记录
+export const rechargeLogDetailApi = params => Http.get(
+  `${BASE_URL}/tenant/rechargeInfo`,
   { params }
 )
 

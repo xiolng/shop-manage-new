@@ -67,9 +67,12 @@ Http.interceptors.response.use(
   },
   error => {
     if (JSON.stringify(error).includes('403')) {
-      error.config.url.indexOf('signin') <= -1 ? message.error('登录过期，请重新登录') : message.error('用户名或密码错误')
       localStorage.clear()
-      location.href = error.config.url.indexOf('signin') <= -1 ? '#/signin' : location.href
+      error.config.url.indexOf('signin') <= -1 ? message.error('登录过期，请重新登录') : message.error('用户名或密码错误')
+      localStorage.setItem('link', location.href)
+      setTimeout(() => {
+        location.href = error.config.url.indexOf('signin') <= -1 ? '#/signin' : location.href
+      }, 1000)
     }
     return error
   })

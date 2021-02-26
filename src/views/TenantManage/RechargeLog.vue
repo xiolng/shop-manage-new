@@ -5,21 +5,21 @@
 <template>
   <div class="rechargeLog, main-content">
     <!--筛选、添加-->
-    <a-row type="flex" justify="space-between" align="top" class="mb-20">
-      <!--<a-col span="20">-->
-      <!--  <search-c-->
-      <!--    @get-list="getSearch"-->
-      <!--    :search-list="[-->
-      <!--      {name: '用户名', key: 'username'}-->
-      <!--      ]"-->
-      <!--  />-->
-      <!--</a-col>-->
-      <a-button
-        type="primary"
-        @click="visible = true"
-      >充值
-      </a-button>
-    </a-row>
+    <!--<a-row type="flex" justify="space-between" align="top" class="mb-20">-->
+    <!--<a-col span="20">-->
+    <!--  <search-c-->
+    <!--    @get-list="getSearch"-->
+    <!--    :search-list="[-->
+    <!--      {name: '用户名', key: 'username'}-->
+    <!--      ]"-->
+    <!--  />-->
+    <!--</a-col>-->
+    <!--<a-button-->
+    <!--  type="primary"-->
+    <!--  @click="visible = true"-->
+    <!--&gt;充值-->
+    <!--</a-button>-->
+    <!--</a-row>-->
     <!--table-list-->
     <a-table
       :columns="column"
@@ -28,6 +28,12 @@
       rowKey="id"
       @change="pageChange"
     >
+      <div slot="rechargeDay" slot-scope="text">
+        {{text}} 月
+      </div>
+      <div slot="rechargePrice" slot-scope="text">
+        {{text}} 元
+      </div>
       <div slot="operation" slot-scope="text, record">
         <a-row type="flex">
           <a-col>
@@ -50,74 +56,32 @@
         </a-row>
       </div>
     </a-table>
-    <a-modal
-      title="充值"
-      :visible="visible"
-      @cancel="visible = false, form.resetFields()"
-      @ok="saveRecharge"
-    >
-      <a-form :form="form" :label-col="{span: 4}" :wrapper-col="{span: 16}">
-        <a-form-item label="充值时长">
-          <a-input-number
-            placeholder="请输入充值时长"
-            v-decorator="[
-              `rechargeDay`,
-              {
-                rules: [{required: true, message: `请输入充值时长`}]
-              }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item label="充值价格">
-          <a-input-number
-            placeholder="请输入充值价格"
-            v-decorator="[
-              `rechargePrice`,
-              {
-                rules: [{required: true, message: `请输入充值价格`}]
-              }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item label="充值描述">
-          <a-textarea
-            :min="3"
-            :max="5"
-            placeholder="请输入充值描述"
-            v-decorator="[
-              `rechargeDetail`,
-              {
-                rules: [{required: true, message: `请输入充值描述`}]
-              }
-            ]"
-          />
-        </a-form-item>
-      </a-form>
-    </a-modal>
   </div>
 </template>
 
 <script>
 
   // import SearchC from '@/components/SearchC/SearchC'
-  import { rechargeApi, rechargeLogApi } from '@/api/TenantManageApi'
+  import { rechargeLogApi } from '@/api/TenantManageApi'
 
   const column = [
     {
       title: '充值时长',
-      dataIndex: 'rechargeDay'
+      dataIndex: 'rechargeDay',
+      scopedSlots: { customRender: 'rechargeDay' }
     },
     {
       title: '充值价格',
-      dataIndex: 'rechargePrice'
+      dataIndex: 'rechargePrice',
+      scopedSlots: { customRender: 'rechargePrice' }
     },
     {
       title: '充值备注',
-      dataIndex: 'rechargeDay'
+      dataIndex: 'rechargeDetail'
     },
     {
       title: '充值人',
-      dataIndex: 'phone'
+      dataIndex: 'createName'
     },
     // {
     //   title: '操作',
@@ -127,7 +91,7 @@
     // }
   ]
   export default {
-    name: '/rechargeLog',
+    name: 'rechargeLog',
     // components: { SearchC },
     data () {
       return {
@@ -151,39 +115,19 @@
       // 获取列表
       getList () {
         rechargeLogApi({
-          // ...this.pages,
+          ...this.pages,
           // ...this.searchName,
           tenantId: this.$route.query.tenantId
         }).then(res => {
           const { data, code, total } = res.data
           if (code === '200') {
             this.dataSource = data
+            console.log(data)
             this.pages.total = total
           }
         })
       },
-      /**
-       * 充值
-       * @param id
-       */
-      saveRecharge () {
-        this.form.validateFields((err, val) => {
-          if (!err) {
-            console.log(val)
-            rechargeApi({
-              ...val,
-              tenantId: this.$route.query.tenantId
-            }).then(res => {
-              const { code } = res
-              if (code === '200') {
-                this.visible = false
-                this.$message.success('充值成功')
-                this.getList()
-              }
-            })
-          }
-        })
-      },
+
       /**
        * 删除
        * @param id

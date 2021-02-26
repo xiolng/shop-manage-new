@@ -57,13 +57,6 @@
     data () {
       return {
         form: this.$form.createForm(this, { name: 'form' }),
-        serviceList: [],
-        selectService: {
-          specList: [],
-          subList: []
-        },
-        specData: {},
-        subData: {}
       }
     },
     mounted () {
@@ -75,9 +68,12 @@
           tenantId: this.editId
         }).then(res => {
           const { data, code } = res.data
+          const item = ['appId', 'mchId', 'mchKey']
           if (data && code === '200') {
-            this.form.setFieldsValue({
-              ...data
+            item.map(v => {
+              this.form.setFieldsValue({
+                [v]: data[v]
+              })
             })
           }
         })

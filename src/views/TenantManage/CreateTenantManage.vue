@@ -6,7 +6,7 @@
   <div class="CreateTenantManage">
     <a-modal
       :visible="visible"
-      :title="editId ? '编辑' : '新建'"
+      :title="editId ? '编辑租户' : '新建租户'"
       @cancel="$emit('cancel')"
       @ok="$emit('create')"
     >
@@ -33,17 +33,19 @@
         <!--    ]"-->
         <!--  />-->
         <!--</a-form-item>-->
-        <a-form-item label="密码">
-          <a-input-password
-            placeholder="请输入密码"
-            v-decorator="[
+        <template v-if="!editId">
+          <a-form-item label="密码">
+            <a-input-password
+              placeholder="请输入密码"
+              v-decorator="[
               `password`,
               {
                 rules: [{required: true, message: '请输入密码'}]
               }
             ]"
-          />
-        </a-form-item>
+            />
+          </a-form-item>
+        </template>
         <a-form-item label="真实姓名">
           <a-input
             placeholder="请输入真实姓名"
@@ -66,30 +68,32 @@
             ]"
           />
         </a-form-item>
-        <a-form-item label="充值时长">
-          <a-input-number
-            placeholder="请输入充值时长"
-            v-decorator="[
+        <template v-if="!editId">
+          <a-form-item label="充值时长">
+            <a-input-number
+              placeholder="请输入充值时长"
+              v-decorator="[
               `rechargeDay`,
               {
-                initialValue: 1,
+                initialValue: undefined,
                 rules: [{required: true, message: '请输入充值时长'}]
               }
             ]"
-          />
-        </a-form-item>
-        <a-form-item label="充值价格">
-          <a-input-number
-            placeholder="请输入充值价格"
-            v-decorator="[
+            />
+          </a-form-item>
+          <a-form-item label="充值价格">
+            <a-input-number
+              placeholder="请输入充值价格"
+              v-decorator="[
               `rechargePrice`,
               {
-                initialValue: 1,
+                initialValue: undefined,
                 rules: [{required: true, message: '请输入充值价格'}]
               }
             ]"
-          />
-        </a-form-item>
+            />
+          </a-form-item>
+        </template>
         <a-form-item label="租户编码">
           <a-input
             placeholder="请输入租户编码"
@@ -152,7 +156,7 @@
     },
     methods: {
       getDetail () {
-        tenanteDetailApi({ id: this.editId }).then(res => {
+        tenanteDetailApi({ tenantId: this.editId }).then(res => {
           const defualtData = ['password', 'phone', 'realName', 'tenantDetail', 'tenantName', 'tenantStatus', 'username', 'rechargeDay', 'rechargePrice', 'tenantCode']
           if (res.data.code === '200') {
             const { data } = res.data
