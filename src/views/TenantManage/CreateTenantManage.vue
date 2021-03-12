@@ -34,13 +34,21 @@
         <!--  />-->
         <!--</a-form-item>-->
         <template v-if="!editId">
-          <a-form-item label="密码">
+          <a-form-item
+            label="密码"
+            extra="请输入8-32位大小写英文字母+数字"
+          >
             <a-input-password
               placeholder="请输入密码"
               v-decorator="[
               `password`,
               {
-                rules: [{required: true, message: '请输入密码'}]
+                rules: [
+                  {required: true, message: '请输入密码'},
+                  {
+                    validator: checkPassword
+                  }
+                ]
               }
             ]"
             />
@@ -169,6 +177,19 @@
             })
           }
         })
+      },
+      checkPassword (rule, value, callback) {
+        const passwordReg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/
+        if (!value) {
+          callback()
+          return
+        }
+        if (value.length < 8 || !passwordReg.test(value)) {
+          // eslint-disable-next-line standard/no-callback-literal
+          callback('请输入正确格式密码')
+          return
+        }
+        callback()
       },
     },
   }
