@@ -3,10 +3,10 @@
     <a-dropdown :trigger="['hover']">
       <div>
         <!--用户头像-->
-        <a-avatar size="default" :style="{background: iconBg}">{{username && username.split('')[0].toLocaleUpperCase()}}
+        <a-avatar size="default" :style="{background: iconBg}">{{'管'.toLocaleUpperCase()}}
         </a-avatar>
         <!--用户名称-->
-        <span class="name-txt">{{username}}</span>
+        <span class="name-txt">管理员</span>
         <a-icon type="caret-down" style="font-size: 18px; vertical-align: middle;"></a-icon>
       </div>
       <!--选择列表-->

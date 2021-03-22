@@ -70,7 +70,7 @@
         </a-layout-content>
         <!--页脚-->
         <a-layout-footer style="text-align: center">
-          Management System ©{{(new Date()).getFullYear()}} Created By WanLang
+          Management System ©{{(new Date()).getFullYear()}} Created By ZZN
         </a-layout-footer>
       </a-layout>
     </a-layout>
