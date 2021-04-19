@@ -95,3 +95,19 @@ export const disableTenantSystemServiceApi = params => Http.get(
   `${BASE_URL}/tenantSystemService/disableTenantSystemService`,
   { params }
 )
+
+// 保存小程序信息
+export const saveWxMiniappApi = data => Http.post(
+  `${BASE_URL}/wxMiniapp/saveWxMiniapp`,
+  data
+)
+// 更新小程序信息
+export const updateMiniappApi = data => Http.post(
+  `${BASE_URL}/wxMiniapp/updateMiniapp`,
+  data
+)
+// 获取小程序信息
+export const getWxMiniappApi = params => Http.get(
+  `${BASE_URL}/wxMiniapp/getWxMiniapp`,
+  { params }
+)

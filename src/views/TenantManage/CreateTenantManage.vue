@@ -22,17 +22,38 @@
             ]"
           />
         </a-form-item>
-        <!--<a-form-item label="用户名">-->
-        <!--  <a-input-->
-        <!--    placeholder="请输入用户名"-->
-        <!--    v-decorator="[-->
-        <!--      `username`,-->
-        <!--      {-->
-        <!--        rules: [{required: true, message: '请输入用户名'}]-->
-        <!--      }-->
-        <!--    ]"-->
-        <!--  />-->
-        <!--</a-form-item>-->
+        <a-form-item label="租户类别">
+          <a-radio-group
+            v-decorator="[
+              `tenantGategory`,
+              {
+                rules: [
+                {required: true, message: '请选择租户类别'}
+              ]
+              }
+            ]"
+          >
+            <a-radio :value="0">超市</a-radio>
+            <a-radio :value="1">外卖</a-radio>
+            <a-radio :value="2">饭店</a-radio>
+            <a-radio :value="3">电商</a-radio>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item label="公众号" extra="是否启用公众号">
+          <a-switch
+            checked-children="是"
+            un-checked-children="否"
+            v-decorator="[
+              `officialAccount`,
+              {
+                valuePropName: 'checked',
+                rules: [
+                {required: true, message: '请选择是否启用公众号'}
+              ]
+              }
+            ]"
+          ></a-switch>
+        </a-form-item>
         <template v-if="!editId">
           <a-form-item
             label="密码"
@@ -87,7 +108,7 @@
                 rules: [{required: true, message: '请输入充值时长'}]
               }
             ]"
-            />
+            /> 月
           </a-form-item>
           <a-form-item label="充值价格">
             <a-input-number
@@ -99,20 +120,20 @@
                 rules: [{required: true, message: '请输入充值价格'}]
               }
             ]"
-            />
+            /> 元
           </a-form-item>
         </template>
-        <a-form-item label="租户编码">
-          <a-input
-            placeholder="请输入租户编码"
-            v-decorator="[
-              `tenantCode`,
-              {
-                rules: [{required: true, message: '请输入租户编码'}]
-              }
-            ]"
-          />
-        </a-form-item>
+        <!--<a-form-item label="租户编码">-->
+        <!--  <a-input-->
+        <!--    placeholder="请输入租户编码"-->
+        <!--    v-decorator="[-->
+        <!--      `tenantCode`,-->
+        <!--      {-->
+        <!--        rules: [{required: true, message: '请输入租户编码'}]-->
+        <!--      }-->
+        <!--    ]"-->
+        <!--  />-->
+        <!--</a-form-item>-->
         <!--<a-form-item label="租户状态">-->
         <!--  <a-switch-->
         <!--    placeholder="请输入租户状态"-->
@@ -165,11 +186,11 @@
     methods: {
       getDetail () {
         tenanteDetailApi({ tenantId: this.editId }).then(res => {
-          const defualtData = ['password', 'phone', 'realName', 'tenantDetail', 'tenantName', 'tenantStatus', 'username', 'rechargeDay', 'rechargePrice', 'tenantCode']
+          const defualtData = ['password', 'phone', 'realName', 'tenantDetail', 'tenantName', 'tenantStatus', 'username', 'rechargeDay', 'rechargePrice', 'officialAccount', 'tenantGategory']
           if (res.data.code === '200') {
             const { data } = res.data
             Object.values(defualtData).map(v => {
-              if (v === 'tenantStatus') {
+              if (v === 'tenantStatus' || v === 'officialAccount') {
                 this.form.setFieldsValue({ [v]: !!data[v] })
               } else {
                 this.form.setFieldsValue({ [v]: data[v] })

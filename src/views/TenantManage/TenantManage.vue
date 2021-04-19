@@ -41,6 +41,15 @@
         >支付配置
         </a-button>
       </div>
+      <div slot="miniApp" slot-scope="text, record">
+        <a-button
+          type="primary"
+          size="small"
+          class="mr-10"
+          @click="showMiniApp = true, editId = record.tenantId"
+        >小程序配置
+        </a-button>
+      </div>
       <div slot="/rechargeLog" slot-scope="text, record">
         <a-row
           type="flex"
@@ -118,7 +127,7 @@
       :edit-id="editId"
       :visible="isService"
       @cancel="isService = false, editId = ''"
-      @create="isService = false"
+      @create="isService = false, editId = ''"
     />
     <recharge-comp
       v-if="visibleRecharge"
@@ -126,7 +135,15 @@
       :edit-id="editId"
       :visible="visibleRecharge"
       @cancel="visibleRecharge = false, editId = ''"
-      @create="visibleRecharge = false"
+      @create="visibleRecharge = false, editId = ''"
+    />
+    <mini-app
+      v-if="showMiniApp"
+      ref="miniAppRef"
+      :edit-id="editId"
+      :visible="showMiniApp"
+      @cancel="showMiniApp = false, editId = ''"
+      @create="showMiniApp = false, editId = ''"
     />
   </div>
 </template>
@@ -144,11 +161,17 @@
   import CreateTenantManage from '@/views/TenantManage/CreateTenantManage'
   import ServiceManage from '@/views/TenantManage/ServiceManage'
   import RechargeComp from '@/views/TenantManage/RechargeComp'
+  import MiniApp from '@/views/TenantManage/MiniApp'
 
   const column = [
     {
       title: '租户名称',
       dataIndex: 'tenantName',
+      width: '10%'
+    },
+    {
+      title: '租户编码',
+      dataIndex: 'tenantCode',
       width: '10%'
     },
     {
@@ -160,6 +183,11 @@
       title: '支付配置',
       dataIndex: 'serviceManage',
       scopedSlots: { customRender: 'serviceManage' }
+    },
+    {
+      title: '小程序配置',
+      dataIndex: 'miniApp',
+      scopedSlots: { customRender: 'miniApp' }
     },
     {
       title: '创建人',
@@ -177,12 +205,12 @@
       scopedSlots: { customRender: '/rechargeLog' },
       width: 160
     },
-    {
-      title: '租户描述',
-      dataIndex: 'mainUser',
-      width: '10%',
-      ellipsis: true
-    },
+    // {
+    //   title: '租户描述',
+    //   dataIndex: 'mainUser',
+    //   width: '10%',
+    //   ellipsis: true
+    // },
     {
       title: '操作',
       dataIndex: 'operation',
@@ -193,6 +221,7 @@
   export default {
     name: 'TenantManage',
     components: {
+      MiniApp,
       RechargeComp,
       ServiceManage,
       CreateTenantManage,
@@ -216,7 +245,9 @@
         // 启用、禁用修改loading
         tenantStatusLoading: false,
         // 充值
-        visibleRecharge: false
+        visibleRecharge: false,
+        // 绑定小程序
+        showMiniApp: false
       }
     },
     mounted () {
@@ -249,6 +280,7 @@
             func({
               ...val,
               ...editData,
+              officialAccount: +val.officialAccount
               // tenantStatus: +val.tenantStatus
             }).then(res => {
               if (res.data.code === '200') {

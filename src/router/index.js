@@ -113,6 +113,36 @@ const routes = [
             }
           },
         ]
+      },
+      {
+        path: `/systemIdea`,
+        name: 'systemIdea',
+        component: () => import('@/views/SystemIdea'),
+        meta: {
+          name: '系统反馈',
+          icon: 'menu',
+          activeUrl: '/systemIdea'
+        },
+        children: [
+          {
+            path: 'list',
+            name: 'systemIdeaList',
+            component: () => import('@/views/SystemIdea/SystemIdea'),
+            meta: {
+              name: '反馈管理',
+              activeUrl: '/systemIdea/list'
+            }
+          },
+          {
+            path: 'ideaDetail',
+            name: 'ideaDetail',
+            component: () => import('@/views/SystemIdea/SystemIdeaDetail'),
+            meta: {
+              name: '反馈详情',
+              activeUrl: '/systemIdea/list'
+            }
+          },
+        ]
       }
     ]
   },
