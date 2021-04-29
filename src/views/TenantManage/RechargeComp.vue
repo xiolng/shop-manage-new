@@ -33,7 +33,7 @@
               }
             ]"
           />
-          月
+          天
         </a-form-item>
         <a-form-item label="充值价格">
           <a-input-number

@@ -108,6 +108,7 @@
                 rules: [{required: true, message: '请输入充值时长'}]
               }
             ]"
+              :min="1"
             /> 月
           </a-form-item>
           <a-form-item label="充值价格">
@@ -120,6 +121,7 @@
                 rules: [{required: true, message: '请输入充值价格'}]
               }
             ]"
+              :min="1"
             /> 元
           </a-form-item>
         </template>

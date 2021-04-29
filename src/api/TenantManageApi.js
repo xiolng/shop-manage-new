@@ -73,9 +73,14 @@ export const pageTenantSystemServiceApi = data => Http.post(
   `${BASE_URL}/tenantSystemService/pageTenantSystemService`,
   data
 )
-// 开通服务
+// 保存支付配置
 export const savePaySettingApi = data => Http.post(
   `${BASE_URL}/tenant/savePaySettings`,
+  data
+)
+// 更新支付配置
+export const updateSettingsApi = data => Http.post(
+  `${BASE_URL}/tenant/updateSettings`,
   data
 )
 // 查询支付配置

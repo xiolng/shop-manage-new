@@ -311,11 +311,11 @@
       },
       /**
        * 删除
-       * @param id
+       * @param tenantId
        */
-      deleteItem (id) {
+      deleteItem (tenantId) {
         tenantDeleteApi({
-          id
+          tenantId
         }).then(res => {
           const { code } = res.data
           if (code === '200') {
