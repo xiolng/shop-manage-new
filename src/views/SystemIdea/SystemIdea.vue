@@ -67,6 +67,10 @@
       dataIndex: 'ideaBy'
     },
     {
+      title: '创建时间',
+      dataIndex: 'createTime'
+    },
+    {
       title: '操作',
       dataIndex: 'operation',
       width: '20%',

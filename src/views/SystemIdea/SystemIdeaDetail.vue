@@ -6,6 +6,14 @@
   <div class="system-idea-detail main-content">
     <div class="item-box">
       <div class="item-label">
+        创建时间：
+      </div>
+      <div class="item-content">
+        {{detail.createTime}}
+      </div>
+    </div>
+    <div class="item-box">
+      <div class="item-label">
         标题：
       </div>
       <div class="item-content">
@@ -30,7 +38,7 @@
     </div>
     <div class="item-box">
       <div class="item-label">
-        身份证背面路径：
+        反馈图片：
       </div>
       <div class="item-content">
         <a-avatar
