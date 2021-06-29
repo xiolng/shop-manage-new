@@ -1,6 +1,6 @@
 import Http from '@/api/Http'
 
-const BASE_URL = ''
+const BASE_URL = '/api'
 // 上传图片
 export const uploadImgApi = data => Http({
   url: `${BASE_URL}/file/upload`,

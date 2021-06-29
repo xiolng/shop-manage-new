@@ -32,6 +32,21 @@ export const tenantEditApi = data => Http.post(
   `${BASE_URL}/tenant/updateTenant`,
   data
 )
+// 获取租户营销
+export const tenantMarketingListApi = params => Http.get(
+  `${BASE_URL}/tenantMarketing/tenantMarketingList`,
+  { params }
+)
+// 保存租户营销
+export const saveTenantMarketingApi = data => Http.post(
+  `${BASE_URL}/tenantMarketing/saveTenantMarketing`,
+  data
+)
+// 更新租户营销
+export const updateTenantMarketingApi = data => Http.post(
+  `${BASE_URL}/tenantMarketing/updateTenantMarketing`,
+  data
+)
 // 删除
 export const tenantDeleteApi = params => Http.get(
   `${BASE_URL}/tenant/deleteTentant`,

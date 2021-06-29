@@ -89,6 +89,9 @@
           @click="setTenantStatus(record)"
         />
       </div>
+      <div slot="marketings" slot-scope="text, record">
+        <a-button type="primary" size="small" @click="showMarketing = true, editId = record.tenantId">设置</a-button>
+      </div>
       <div slot="operation" slot-scope="text, record">
         <a-row type="flex">
           <a-col>
@@ -145,6 +148,15 @@
       @cancel="showMiniApp = false, editId = ''"
       @create="showMiniApp = false, editId = ''"
     />
+    <!--设置营销工具-->
+    <change-marketing
+      v-if="showMarketing"
+      :visible="showMarketing"
+      :edit-id="editId"
+      ref="marketingRef"
+      @cancel="showMarketing = false, editId = null"
+      @create="showMarketing = false, editId = null, getList()"
+    />
   </div>
 </template>
 
@@ -162,6 +174,7 @@
   import ServiceManage from '@/views/TenantManage/ServiceManage'
   import RechargeComp from '@/views/TenantManage/RechargeComp'
   import MiniApp from '@/views/TenantManage/MiniApp'
+  import ChangeMarketing from '@/views/TenantManage/ChangeMarketing'
 
   const column = [
     {
@@ -190,14 +203,9 @@
       scopedSlots: { customRender: 'miniApp' }
     },
     {
-      title: '创建人',
-      dataIndex: 'createBy',
-      ellipsis: true,
-      width: '10%'
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createTime'
+      title: '营销工具',
+      dataIndex: 'marketings',
+      scopedSlots: { customRender: 'marketings' }
     },
     {
       title: '充值',
@@ -221,6 +229,7 @@
   export default {
     name: 'TenantManage',
     components: {
+      ChangeMarketing,
       MiniApp,
       RechargeComp,
       ServiceManage,
@@ -247,7 +256,9 @@
         // 充值
         visibleRecharge: false,
         // 绑定小程序
-        showMiniApp: false
+        showMiniApp: false,
+        // 设置营销工具
+        showMarketing: false
       }
     },
     mounted () {

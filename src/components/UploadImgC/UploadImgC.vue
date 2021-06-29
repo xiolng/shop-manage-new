@@ -78,7 +78,7 @@
         uploadImgApi(formData).then(res => {
           if (res.data.code === '200') {
             this.fileList.push({
-              url: `/fileLoad/files/${res.data.data}`,
+              url: `/files/${res.data.data}`,
               status: 'done',
               uid: (this.fileList.length && Math.max(...this.fileList.map(v => v.uid)) + 1) || 1,
               name: file.name
@@ -103,7 +103,7 @@
           if (!newValue) return
           if (typeof newValue === 'string') {
             this.fileList = [{
-              url: '/fileLoad/files/' + newValue,
+              url: '/files/' + newValue,
               status: 'done',
               uid: 1,
               name: newValue
@@ -112,7 +112,7 @@
             this.fileList = []
             newValue.map((v, index) => {
               this.fileList.push({
-                url: '/fileLoad/files/' + v,
+                url: '/files/' + v,
                 status: 'done',
                 uid: index + 1,
                 name: v

@@ -115,6 +115,50 @@ const routes = [
         ]
       },
       {
+        path: `/marketingManage`,
+        name: `marketingManage`,
+        component: () => import('@/views/MarketingManage'),
+        meta: {
+          name: '营销管理',
+          icon: 'menu',
+          activeUrl: '/marketingManage',
+        },
+        children: [
+          {
+            path: `list`,
+            name: 'list',
+            component: () => import('@/views/MarketingManage/List'),
+            meta: {
+              name: '营销列表',
+              icon: 'menu',
+              activeUrl: '/marketingManage/list'
+            }
+          }
+        ]
+      },
+      {
+        path: `/sceneManage`,
+        name: `sceneManage`,
+        component: () => import('@/views/SceneManage'),
+        meta: {
+          name: '场景管理',
+          icon: 'menu',
+          activeUrl: '/sceneManage',
+        },
+        children: [
+          {
+            path: `list`,
+            name: 'list',
+            component: () => import('@/views/SceneManage/List'),
+            meta: {
+              name: '场景列表',
+              icon: 'menu',
+              activeUrl: '/sceneManage/list'
+            }
+          }
+        ]
+      },
+      {
         path: `/systemIdea`,
         name: 'systemIdea',
         component: () => import('@/views/SystemIdea'),
