@@ -43,7 +43,7 @@
               type="primary"
               size="small"
               class="mr-10"
-              @click="visible = !visible, isEdit = record.marketingId"
+              @click="visible = !visible, editId = record.marketingId"
             >编辑
             </a-button>
           </a-col>
